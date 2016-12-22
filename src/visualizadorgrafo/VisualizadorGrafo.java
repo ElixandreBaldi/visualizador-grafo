@@ -27,6 +27,25 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblEuleriano = new javax.swing.JLabel();
+        lblConexos = new javax.swing.JLabel();
+        menuPrincipal = new javax.swing.JMenuBar();
+        itemArquivo = new javax.swing.JMenu();
+        subItemArquivoNovo = new javax.swing.JMenuItem();
+        subItemArquivoAbrir = new javax.swing.JMenuItem();
+        subItemArquivoSalvar = new javax.swing.JMenuItem();
+        subItemArquivoSair = new javax.swing.JMenuItem();
+        itemEditar = new javax.swing.JMenu();
+        subItemEditarInserirVertice = new javax.swing.JMenuItem();
+        subItemEditarInserirAresta = new javax.swing.JMenuItem();
+        subItemEditarRemoverVertice = new javax.swing.JMenuItem();
+        subItemEditarRemoverAresta = new javax.swing.JMenuItem();
+        itemBusca = new javax.swing.JMenu();
+        subItemBuscaLargura = new javax.swing.JMenuItem();
+        subItemBuscaProfundidade = new javax.swing.JMenuItem();
+        subItemBuscaFleury = new javax.swing.JMenuItem();
+        subItemBuscaDijkstra = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Visualizador Grafo");
         setMaximumSize(new java.awt.Dimension(800, 600));
@@ -34,19 +53,108 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         setName("mainFrame"); // NOI18N
         setPreferredSize(new java.awt.Dimension(800, 600));
 
+        lblEuleriano.setText("Não euleriano");
+        lblEuleriano.setEnabled(false);
+        lblEuleriano.setFocusable(false);
+
+        lblConexos.setText("Componentes conexos: 0");
+        lblConexos.setEnabled(false);
+        lblConexos.setFocusable(false);
+
+        itemArquivo.setText("Arquivo");
+
+        subItemArquivoNovo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        subItemArquivoNovo.setText("Novo");
+        itemArquivo.add(subItemArquivoNovo);
+
+        subItemArquivoAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        subItemArquivoAbrir.setText("Abrir");
+        itemArquivo.add(subItemArquivoAbrir);
+
+        subItemArquivoSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        subItemArquivoSalvar.setText("Salvar");
+        itemArquivo.add(subItemArquivoSalvar);
+
+        subItemArquivoSair.setText("Sair");
+        subItemArquivoSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemArquivoSairActionPerformed(evt);
+            }
+        });
+        itemArquivo.add(subItemArquivoSair);
+
+        menuPrincipal.add(itemArquivo);
+
+        itemEditar.setText("Editar");
+
+        subItemEditarInserirVertice.setText("Inserir vértice");
+        itemEditar.add(subItemEditarInserirVertice);
+
+        subItemEditarInserirAresta.setText("Inserir aresta");
+        itemEditar.add(subItemEditarInserirAresta);
+
+        subItemEditarRemoverVertice.setText("Remover vértice");
+        itemEditar.add(subItemEditarRemoverVertice);
+
+        subItemEditarRemoverAresta.setText("Remover aresta");
+        itemEditar.add(subItemEditarRemoverAresta);
+
+        menuPrincipal.add(itemEditar);
+
+        itemBusca.setText("Busca");
+
+        subItemBuscaLargura.setText("Busca em largura");
+        itemBusca.add(subItemBuscaLargura);
+
+        subItemBuscaProfundidade.setText("Busca em profundidade");
+        subItemBuscaProfundidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemBuscaProfundidadeActionPerformed(evt);
+            }
+        });
+        itemBusca.add(subItemBuscaProfundidade);
+
+        subItemBuscaFleury.setText("Ciclo Euleriano (Fleury)");
+        itemBusca.add(subItemBuscaFleury);
+
+        subItemBuscaDijkstra.setText("Custo Mínimo (Dijkstra)");
+        itemBusca.add(subItemBuscaDijkstra);
+
+        menuPrincipal.add(itemBusca);
+
+        setJMenuBar(menuPrincipal);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblEuleriano)
+                .addGap(18, 18, 18)
+                .addComponent(lblConexos)
+                .addContainerGap(497, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(550, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEuleriano)
+                    .addComponent(lblConexos))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void subItemArquivoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSairActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_subItemArquivoSairActionPerformed
+
+    private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -84,5 +192,23 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu itemArquivo;
+    private javax.swing.JMenu itemBusca;
+    private javax.swing.JMenu itemEditar;
+    private javax.swing.JLabel lblConexos;
+    private javax.swing.JLabel lblEuleriano;
+    private javax.swing.JMenuBar menuPrincipal;
+    private javax.swing.JMenuItem subItemArquivoAbrir;
+    private javax.swing.JMenuItem subItemArquivoNovo;
+    private javax.swing.JMenuItem subItemArquivoSair;
+    private javax.swing.JMenuItem subItemArquivoSalvar;
+    private javax.swing.JMenuItem subItemBuscaDijkstra;
+    private javax.swing.JMenuItem subItemBuscaFleury;
+    private javax.swing.JMenuItem subItemBuscaLargura;
+    private javax.swing.JMenuItem subItemBuscaProfundidade;
+    private javax.swing.JMenuItem subItemEditarInserirAresta;
+    private javax.swing.JMenuItem subItemEditarInserirVertice;
+    private javax.swing.JMenuItem subItemEditarRemoverAresta;
+    private javax.swing.JMenuItem subItemEditarRemoverVertice;
     // End of variables declaration//GEN-END:variables
 }
