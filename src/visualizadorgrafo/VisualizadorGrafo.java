@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import static java.lang.Character.getNumericValue;
 import java.nio.charset.Charset;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -27,20 +28,50 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     public VisualizadorGrafo() {
         initComponents();
     }
-    protected void analisaArquivo(String text) throws Exception {        
-        System.out.println(text);
-        /*FileReader inFile = new FileReader(file.getName());
-        BufferedReader in = new BufferedReader(inFile);
-        
-        StringBuilder sb = new StringBuilder();
-        String line = in.readLine();
-        while(line != null){
-            sb.append(line);
-            sb.append(System.lineSeparator());
-            line = in.readLine();
-            
+    protected void analisaLinha(String text, boolean objeto) throws Exception {        
+        if(!objeto){//vertice  
+            int id = 0, coordX = 0, coordY = 0;
+            String rotulo = "";
+            int flag = 0;
+            int dado;
+            String textoRotulo = "";
+            int i = 0;
+            while(i<text.length()){                
+                if(flag==1){                    
+                    while(text.charAt(i) != ' '){                        
+                        textoRotulo +=text.charAt(i);
+                        i++;
+                    }                                        
+                    rotulo = textoRotulo;
+                    
+                }else if(flag<4){
+                    dado = 0;
+                    while(text.charAt(i) != ' '){                        
+                        int soma = getNumericValue(text.charAt(i));
+                        dado = (dado*10) + soma;
+                        i++;
+                    }                    
+                    if(flag == 0)
+                        id = dado;
+                    else if(flag == 2)
+                        coordX = dado;
+                    else if(flag == 3)
+                        coordY = dado;
+                }                
+                if(text.charAt(i)==' '){
+                    i++;                    
+                }
+                flag++;
+            }
+            Vertice novoVertice = new Vertice(id, coordX, coordY, rotulo);
+            V = new Vertice[1];                        
+            int tam = V.length;
+            V[tam-1] = novoVertice;
         }
-        String everything = sb.toString();*/
+        else{//aresta            
+           // System.out.println(text);
+        }
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,15 +234,23 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), inputCharset));
                 fileLocation = file.getAbsolutePath();
                 this.setTitle("Visualizador Grafo - " + file.getName());
+                boolean flag = false;
                 while ((line = reader.readLine()) != null){
                     if (line.length()>2)
                         if  (line.charAt(0)=='/')
                             if  (line.charAt(1)=='/')
                                 continue;
-                    conteudo = conteudo + line + "\n";
+                    if (line.isEmpty()){
+                        flag = true;
+                        continue;
+                    }
+                    analisaLinha(line,flag);
                 }
-                analisaArquivo(conteudo);
+                
                 reader.close();
+                for(int w=0; w < V.length;w++){
+                    V[w].print();
+                }
             }
             catch (Exception e)
             {
@@ -260,7 +299,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         });
     }
 
-    public String fileLocation;
+    private String fileLocation;
+    private Vertice[] V;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
     private javax.swing.JMenu itemBusca;
