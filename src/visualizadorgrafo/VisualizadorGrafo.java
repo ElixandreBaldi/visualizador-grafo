@@ -5,6 +5,16 @@
  */
 package visualizadorgrafo;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author porlibras
@@ -17,7 +27,21 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     public VisualizadorGrafo() {
         initComponents();
     }
-
+    protected void analisaArquivo(String text) throws Exception {        
+        System.out.println(text);
+        /*FileReader inFile = new FileReader(file.getName());
+        BufferedReader in = new BufferedReader(inFile);
+        
+        StringBuilder sb = new StringBuilder();
+        String line = in.readLine();
+        while(line != null){
+            sb.append(line);
+            sb.append(System.lineSeparator());
+            line = in.readLine();
+            
+        }
+        String everything = sb.toString();*/
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,6 +51,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        selectArquivo = new javax.swing.JFileChooser();
         lblEuleriano = new javax.swing.JLabel();
         lblConexos = new javax.swing.JLabel();
         menuPrincipal = new javax.swing.JMenuBar();
@@ -69,10 +94,20 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         subItemArquivoAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         subItemArquivoAbrir.setText("Abrir");
+        subItemArquivoAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemArquivoAbrirActionPerformed(evt);
+            }
+        });
         itemArquivo.add(subItemArquivoAbrir);
 
         subItemArquivoSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         subItemArquivoSalvar.setText("Salvar");
+        subItemArquivoSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemArquivoSalvarActionPerformed(evt);
+            }
+        });
         itemArquivo.add(subItemArquivoSalvar);
 
         subItemArquivoSair.setText("Sair");
@@ -147,7 +182,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void subItemArquivoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSairActionPerformed
         System.exit(0);
     }//GEN-LAST:event_subItemArquivoSairActionPerformed
@@ -155,6 +190,40 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
+
+    private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
+        String conteudo = "", line;
+        int returnVal = selectArquivo.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            Charset inputCharset = Charset.forName("ISO-8859-1");
+            try
+            {
+                File file = selectArquivo.getSelectedFile();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), inputCharset));
+                fileLocation = file.getAbsolutePath();
+                this.setTitle("Visualizador Grafo - " + file.getName());
+                while ((line = reader.readLine()) != null){
+                    if (line.length()>2)
+                        if  (line.charAt(0)=='/')
+                            if  (line.charAt(1)=='/')
+                                continue;
+                    conteudo = conteudo + line + "\n";
+                }
+                analisaArquivo(conteudo);
+                reader.close();
+            }
+            catch (Exception e)
+            {
+                JOptionPane.showMessageDialog(null, "Erro ao carregar arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
+                System.err.println(e);
+            }
+        }
+    }//GEN-LAST:event_subItemArquivoAbrirActionPerformed
+
+    private void subItemArquivoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSalvarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -191,6 +260,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         });
     }
 
+    public String fileLocation;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
     private javax.swing.JMenu itemBusca;
@@ -198,6 +268,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private javax.swing.JLabel lblConexos;
     private javax.swing.JLabel lblEuleriano;
     private javax.swing.JMenuBar menuPrincipal;
+    private javax.swing.JFileChooser selectArquivo;
     private javax.swing.JMenuItem subItemArquivoAbrir;
     private javax.swing.JMenuItem subItemArquivoNovo;
     private javax.swing.JMenuItem subItemArquivoSair;

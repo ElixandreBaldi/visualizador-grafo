@@ -1,0 +1,10 @@
+// id rotulo x y
+1 'Cascavel' 23 15
+2 'Toledo' 23 5
+3 'Corbélia' 25 10
+4 'Santa Tereza do Oeste' 20 15
+
+//id-origem id-destino custo rotulo
+1 2 40 'BR-467'
+1 3 25 'BR-369'
+1 4 15 'BR-277'
