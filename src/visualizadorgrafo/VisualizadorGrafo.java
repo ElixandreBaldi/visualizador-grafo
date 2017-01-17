@@ -64,7 +64,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 flag++;
             }
             Vertice novoVertice = new Vertice(id, coordX, coordY, rotulo);
-            V = new Vertice[1];                        
+            tamV++;
+            V = new Vertice[tamV];                        
             int tam = V.length;
             V[tam-1] = novoVertice;
         }
@@ -248,6 +249,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 }
                 
                 reader.close();
+                System.out.println(V.length);
                 for(int w=0; w < V.length;w++){
                     V[w].print();
                 }
@@ -298,8 +300,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
         });
     }
-
+    
     private String fileLocation;
+    private int tamV = 0;
     private Vertice[] V;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
