@@ -28,51 +28,56 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     public VisualizadorGrafo() {
         initComponents();
     }
-    protected void analisaLinha(String text, boolean objeto) throws Exception {        
-        if(!objeto){//vertice  
-            int id = 0, coordX = 0, coordY = 0;
-            String rotulo = "";
-            int flag = 0;
-            int dado;
-            String textoRotulo = "";
-            int i = 0;
-            while(i<text.length()){                
-                if(flag==1){                    
+    
+    protected void analisaLinha(String text, boolean isAresta) throws Exception {   
+        if(!isAresta){ //vertice  
+            int  dado, i = 0, id = 0, coordX = 0, coordY = 0, flag = 0;
+            String rotulo = "", textoRotulo = "";
+            // flags: 0 = id, 1 = rótulo, 2 = x, 3 = y
+            while(i < text.length())
+            {              
+                if(flag == 1){
                     while(text.charAt(i) != ' '){                        
                         textoRotulo +=text.charAt(i);
                         i++;
-                    }                                        
+                    }                    
                     rotulo = textoRotulo;
                     
-                }else if(flag<4){
+                }else if(flag < 4)
+                {
                     dado = 0;
                     while(text.charAt(i) != ' '){                        
                         int soma = getNumericValue(text.charAt(i));
                         dado = (dado*10) + soma;
                         i++;
-                    }                    
-                    if(flag == 0)
-                        id = dado;
-                    else if(flag == 2)
-                        coordX = dado;
-                    else if(flag == 3)
-                        coordY = dado;
+                    }
+                    switch(flag){
+                        case 0:
+                            id = dado;
+                            break;
+                        case 2:
+                            coordX = dado;
+                            break;
+                        case 3:
+                            coordY = dado;
+                            break;
+                    }
                 }                
                 if(text.charAt(i)==' '){
                     i++;                    
                 }
                 flag++;
             }
-            Vertice novoVertice = new Vertice(id, coordX, coordY, rotulo);
-            tamV++;
-            V = new Vertice[tamV];                        
-            int tam = V.length;
-            V[tam-1] = novoVertice;
+            Vertice[] tmp = v; // copia o array atual para um temporário
+            nVertices++; // incrementa o número de vértices
+            v = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
+            System.arraycopy(tmp, 0, v, 0, tmp.length); // copia o array temporário para o novo
+            Vertice novoVertice = new Vertice(id, coordX, coordY, rotulo); // cria um novo vértice
+            v[nVertices-1] = novoVertice;
         }
         else{//aresta            
            // System.out.println(text);
         }
-        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -235,24 +240,19 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), inputCharset));
                 fileLocation = file.getAbsolutePath();
                 this.setTitle("Visualizador Grafo - " + file.getName());
-                boolean flag = false;
+                boolean isAresta = false;
                 while ((line = reader.readLine()) != null){
                     if (line.length()>2)
                         if  (line.charAt(0)=='/')
                             if  (line.charAt(1)=='/')
                                 continue;
                     if (line.isEmpty()){
-                        flag = true;
+                        isAresta = true;
                         continue;
                     }
-                    analisaLinha(line,flag);
+                    analisaLinha(line, isAresta);
                 }
-                
                 reader.close();
-                System.out.println(V.length);
-                for(int w=0; w < V.length;w++){
-                    V[w].print();
-                }
             }
             catch (Exception e)
             {
@@ -302,8 +302,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
     
     private String fileLocation;
-    private int tamV = 0;
-    private Vertice[] V;
+    private Vertice[] v = new Vertice[0];
+    private int[][] adjacencia;
+    private int nVertices = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
     private javax.swing.JMenu itemBusca;
