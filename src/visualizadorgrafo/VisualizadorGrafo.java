@@ -68,15 +68,52 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 }
                 flag++;
             }
-            Vertice[] tmp = v; // copia o array atual para um temporário
+            Vertice[] tmp = v; // copia o array vértice atual para um temporário
             nVertices++; // incrementa o número de vértices
             v = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
             System.arraycopy(tmp, 0, v, 0, tmp.length); // copia o array temporário para o novo
             Vertice novoVertice = new Vertice(id, coordX, coordY, rotulo); // cria um novo vértice
             v[nVertices-1] = novoVertice;
         }
-        else{//aresta            
-           // System.out.println(text);
+        else{//aresta 
+           int i = 0, flag = 0, origem = 0, destino = 0, custo = 0, dado;
+           String textoRotulo = "", rotulo = "";
+           
+           while(i < text.length())
+           {
+               if(flag == 3){
+                    while(text.charAt(i) != ' '){                        
+                        textoRotulo +=text.charAt(i);
+                        i++;
+                    }                    
+                    rotulo = textoRotulo;                    
+               }
+               else if(flag < 4){
+                    dado = 0;
+                    while(text.charAt(i) != ' '){                        
+                        int soma = getNumericValue(text.charAt(i));
+                        dado = (dado*10) + soma;
+                        i++;
+                    }                    
+                    switch(flag){
+                        case 0:
+                            origem = dado;
+                            break;
+                        case 1:
+                            destino = dado;
+                            break;
+                        case 2:
+                            custo = dado;
+                            break;
+                    }
+               }
+               if(text.charAt(i)==' '){
+                    i++;                    
+               }
+               flag++;
+           }       
+           Aresta a = new Aresta(rotulo, custo);
+           adjacencia[origem-1][destino-1]=a;
         }
     }
     /**
@@ -248,11 +285,26 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                                 continue;
                     if (line.isEmpty()){
                         isAresta = true;
+                        adjacencia = new Aresta[nVertices][nVertices];                        
+                        for(int i=0;i<nVertices;i++){                            
+                            for(int j = 0; j<nVertices; j++){
+                                adjacencia[i][j]= new Aresta("NULL",-1);
+                            }
+                        }
                         continue;
                     }
                     analisaLinha(line, isAresta);
                 }
-                reader.close();
+                reader.close();  
+                for (int i = 0; i<nVertices; i++){
+                    v[i].print();
+                }
+                for(int i = 0; i<nVertices; i++){
+                    for(int j = 0; j<nVertices; j++){
+                        adjacencia[i][j].print();
+                    }
+                    System.out.println("");
+                }
             }
             catch (Exception e)
             {
@@ -303,7 +355,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     
     private String fileLocation;
     private Vertice[] v = new Vertice[0];
-    private int[][] adjacencia;
+    private Aresta[][] adjacencia;
     private int nVertices = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
