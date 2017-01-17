@@ -1,25 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package visualizadorgrafo;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import static java.lang.Character.getNumericValue;
 import java.nio.charset.Charset;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import static java.lang.Character.getNumericValue;
+import javax.swing.SwingUtilities;
 
-/**
- *
- * @author porlibras
- */
 public class VisualizadorGrafo extends javax.swing.JFrame {
 
     /**
@@ -68,12 +59,18 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 }
                 flag++;
             }
-            Vertice[] tmp = v; // copia o array vértice atual para um temporário
+            Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
             nVertices++; // incrementa o número de vértices
-            v = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
-            System.arraycopy(tmp, 0, v, 0, tmp.length); // copia o array temporário para o novo
+            vertices = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
+            System.arraycopy(tmp, 0, vertices, 0, tmp.length); // copia o array temporário para o novo
             Vertice novoVertice = new Vertice(id, coordX, coordY, rotulo); // cria um novo vértice
-            v[nVertices-1] = novoVertice;
+            vertices[nVertices-1] = novoVertice; // insere o novo vértice na listagem
+            //desenha o vértice na tela:
+            javax.swing.JLabel novoLabel = new javax.swing.JLabel(rotulo, javax.swing.JLabel.CENTER);
+            novoLabel.setBounds(coordX, coordY, novoLabel.getPreferredSize().width, novoLabel.getPreferredSize().height);
+            novoLabel.setForeground(Color.red);
+            this.add(novoLabel);
+            SwingUtilities.updateComponentTreeUI(this);
         }
         else{//aresta 
            int i = 0, flag = 0, origem = 0, destino = 0, custo = 0, dado;
@@ -295,16 +292,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                     }
                     analisaLinha(line, isAresta);
                 }
-                reader.close();  
-                for (int i = 0; i<nVertices; i++){
-                    v[i].print();
-                }
-                for(int i = 0; i<nVertices; i++){
-                    for(int j = 0; j<nVertices; j++){
-                        adjacencia[i][j].print();
-                    }
-                    System.out.println("");
-                }
+                reader.close();
+                System.out.println("Leitura bem-sucedida.");
             }
             catch (Exception e)
             {
@@ -354,7 +343,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
     
     private String fileLocation;
-    private Vertice[] v = new Vertice[0];
+    private Vertice[] vertices = new Vertice[0];
     private Aresta[][] adjacencia;
     private int nVertices = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
