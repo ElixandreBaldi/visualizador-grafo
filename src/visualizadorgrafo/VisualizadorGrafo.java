@@ -2,10 +2,8 @@ package visualizadorgrafo;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,6 +41,27 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
+    }
+    
+    @Override
+    public void paint(Graphics g){
+        super.paint(g);
+        if(redraw){
+            g = painelGrafo.getGraphics();
+            for(int i = 0; i<nVertices;i++){
+                for(int j = 0; j<nVertices; j++){
+                    if(adjacencia[i][j].getCusto() != -1){
+                        int x1, x2, y1, y2;
+                        x1 = vertices[i].getCoordX();
+                        y1 = vertices[i].getCoordY();
+                        x2 = vertices[j].getCoordX();
+                        y2 = vertices[j].getCoordY();
+                        g.drawLine(x1,y1,x2,y2);                        
+                    }
+                }
+            }            
+            redraw = false;
+        }
     }
     
     protected void analisaLinha(String text, boolean isAresta) throws Exception {   
@@ -346,6 +365,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro ao carregar arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
                 System.err.println(e);
             }
+            redraw = true;
+            repaint();
         }
     }//GEN-LAST:event_subItemArquivoAbrirActionPerformed
 
@@ -392,6 +413,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private Vertice[] vertices = new Vertice[0];
     private Aresta[][] adjacencia;
     private int nVertices = 0;
+    private boolean redraw = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
     private javax.swing.JMenu itemBusca;
