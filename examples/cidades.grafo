@@ -1,8 +1,8 @@
 // id rotulo x y
-1 'Cascavel' 100 200 
-2 'Toledo' 150 400 
-3 'Corbelia' 200 100 
-4 'SantaTerezadoOeste' 250 15 
+1 'Cascavel' 380 246 
+2 'Toledo' 233 174 
+3 'Corbelia' 463 153 
+4 'SantaTerezadoOeste' 114 231 
 
 //id-origem id-destino custo rotulo
 1 2 40 'BR-467' 

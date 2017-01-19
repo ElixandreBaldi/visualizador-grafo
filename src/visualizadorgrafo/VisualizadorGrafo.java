@@ -1,6 +1,11 @@
 package visualizadorgrafo;
 
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,12 +17,32 @@ import static java.lang.Character.getNumericValue;
 import javax.swing.SwingUtilities;
 
 public class VisualizadorGrafo extends javax.swing.JFrame {
-
+    
     /**
      * Creates new form VisualizadorGrafo
      */
     public VisualizadorGrafo() {
         initComponents();
+        painelGrafo.addMouseListener(new MouseListener (){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int x=e.getX();
+                int y=e.getY();
+                System.out.println(x+","+y);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
     }
     
     protected void analisaLinha(String text, boolean isAresta) throws Exception {   
@@ -68,8 +93,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             //desenha o vértice na tela:
             javax.swing.JLabel novoLabel = new javax.swing.JLabel(rotulo, javax.swing.JLabel.CENTER);
             novoLabel.setBounds(coordX, coordY, novoLabel.getPreferredSize().width, novoLabel.getPreferredSize().height);
-            novoLabel.setForeground(Color.red);
-            this.add(novoLabel);
+            novoLabel.setForeground(Color.blue);
+            painelGrafo.add(novoLabel);
             SwingUtilities.updateComponentTreeUI(this);
         }
         else{//aresta 
@@ -125,6 +150,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         selectArquivo = new javax.swing.JFileChooser();
         lblEuleriano = new javax.swing.JLabel();
         lblConexos = new javax.swing.JLabel();
+        painelGrafo = new javax.swing.JPanel();
         menuPrincipal = new javax.swing.JMenuBar();
         itemArquivo = new javax.swing.JMenu();
         subItemArquivoNovo = new javax.swing.JMenuItem();
@@ -156,6 +182,20 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         lblConexos.setText("Componentes conexos: 0");
         lblConexos.setEnabled(false);
         lblConexos.setFocusable(false);
+
+        painelGrafo.setBackground(new java.awt.Color(254, 254, 254));
+        painelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
+
+        javax.swing.GroupLayout painelGrafoLayout = new javax.swing.GroupLayout(painelGrafo);
+        painelGrafo.setLayout(painelGrafoLayout);
+        painelGrafoLayout.setHorizontalGroup(
+            painelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        painelGrafoLayout.setVerticalGroup(
+            painelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 532, Short.MAX_VALUE)
+        );
 
         itemArquivo.setText("Arquivo");
 
@@ -236,15 +276,21 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblEuleriano)
-                .addGap(18, 18, 18)
-                .addComponent(lblConexos)
-                .addContainerGap(497, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(painelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblEuleriano)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblConexos)
+                        .addGap(0, 485, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(550, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(painelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEuleriano)
                     .addComponent(lblConexos))
@@ -336,7 +382,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public void run() {                
                 new VisualizadorGrafo().setVisible(true);
             }
         });
@@ -353,6 +399,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private javax.swing.JLabel lblConexos;
     private javax.swing.JLabel lblEuleriano;
     private javax.swing.JMenuBar menuPrincipal;
+    private javax.swing.JPanel painelGrafo;
     private javax.swing.JFileChooser selectArquivo;
     private javax.swing.JMenuItem subItemArquivoAbrir;
     private javax.swing.JMenuItem subItemArquivoNovo;
