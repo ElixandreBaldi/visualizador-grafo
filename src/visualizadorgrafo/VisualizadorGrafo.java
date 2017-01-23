@@ -155,6 +155,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
            }       
            Aresta a = new Aresta(rotulo, custo);
            adjacencia[origem-1][destino-1]=a;
+           adjacencia[destino-1][origem-1]=a;
         }
     }
     /**
@@ -186,6 +187,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         subItemBuscaProfundidade = new javax.swing.JMenuItem();
         subItemBuscaFleury = new javax.swing.JMenuItem();
         subItemBuscaDijkstra = new javax.swing.JMenuItem();
+        subItemAlgoritmosGoodman = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Visualizador Grafo");
@@ -266,7 +268,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         menuPrincipal.add(itemEditar);
 
-        itemBusca.setText("Busca");
+        itemBusca.setText("Algoritmos");
 
         subItemBuscaLargura.setText("Busca em largura");
         itemBusca.add(subItemBuscaLargura);
@@ -284,6 +286,15 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         subItemBuscaDijkstra.setText("Custo Mínimo (Dijkstra)");
         itemBusca.add(subItemBuscaDijkstra);
+
+        subItemAlgoritmosGoodman.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        subItemAlgoritmosGoodman.setText("Goodman");
+        subItemAlgoritmosGoodman.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemAlgoritmosGoodmanActionPerformed(evt);
+            }
+        });
+        itemBusca.add(subItemAlgoritmosGoodman);
 
         menuPrincipal.add(itemBusca);
 
@@ -374,6 +385,55 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
 
+    private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
+        Vertice[] verticesGoodman = vertices;
+        Aresta[][] adjacenciaGoodman = adjacencia;
+        int nVerticesGoodman = nVertices, nComponentesConexo = 0;
+        int i = 0;
+        int j = 0;
+        int x = 0;
+        
+        while(i < nVerticesGoodman){
+            boolean flag = false;
+            while(j < nVerticesGoodman){
+                if(adjacenciaGoodman[i][j].getCusto() != -1){                    
+                    flag = true;
+                    for(x = 0; x<nVerticesGoodman; x++){
+                        if(j != x)
+                            if(adjacenciaGoodman[j][x].getCusto() == -1)
+                                adjacenciaGoodman[j][x] = adjacenciaGoodman[i][x];
+                        adjacenciaGoodman[i][x] = new Aresta("NULL", -1);
+                    }
+                }                
+                j++;
+            }
+            i++;
+            j = 0;
+            if(flag)
+                nComponentesConexo++;  
+            
+            
+            
+            
+            
+            for(int w = 0; w<nVerticesGoodman; w++){
+                for(int y = 0; y<nVerticesGoodman; y++){
+                    if(adjacenciaGoodman[w][y].getCusto() != -1){
+                        System.out.printf("1 ");
+                    }
+                    else
+                        System.out.printf("0 ");
+                }
+                System.out.println("");
+            }
+        }
+        
+        System.out.println(nComponentesConexo);
+        
+        
+        
+    }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -423,6 +483,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private javax.swing.JMenuBar menuPrincipal;
     private javax.swing.JPanel painelGrafo;
     private javax.swing.JFileChooser selectArquivo;
+    private javax.swing.JMenuItem subItemAlgoritmosGoodman;
     private javax.swing.JMenuItem subItemArquivoAbrir;
     private javax.swing.JMenuItem subItemArquivoNovo;
     private javax.swing.JMenuItem subItemArquivoSair;
