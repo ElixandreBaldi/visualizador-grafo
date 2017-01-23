@@ -384,50 +384,79 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private void subItemArquivoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSalvarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
-
+    
+    
+    
+    boolean isGrafo(Aresta[][] grafo, int n){
+        for(int i = 0; i<n; i++)
+            for(int j = 0; j<n; j++)
+                if(grafo[i][j].getCusto() != -1)
+                    return true;
+        return false;
+    }
+    void printAA(Aresta[][] adjacenciaGoodman, int nVerticesGoodman){
+        for(int w = 0; w<nVerticesGoodman; w++){
+            for(int y = 0; y<nVerticesGoodman; y++){
+                if(adjacenciaGoodman[w][y].getCusto() != -1){
+                    System.out.printf("1 ");
+                }
+                else
+                    System.out.printf("0 ");
+            }
+            System.out.println("");
+        }
+        System.out.println("");
+    }
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
+        
+        
+        
         Vertice[] verticesGoodman = vertices;
         Aresta[][] adjacenciaGoodman = adjacencia;
         int nVerticesGoodman = nVertices, nComponentesConexo = 0;
-        int i = 0;
-        int j = 0;
+        int i = 0;        
         int x = 0;
+        printAA(adjacenciaGoodman, nVerticesGoodman);
+        boolean flag = false;
+        boolean[] visitados = new boolean[nVerticesGoodman];        
+        for(int w = 0; w<visitados.length;w++)
+            visitados[w] = false;
+        visitados[0] = true;
         
-        while(i < nVerticesGoodman){
-            boolean flag = false;
-            while(j < nVerticesGoodman){
-                if(adjacenciaGoodman[i][j].getCusto() != -1){                    
-                    flag = true;
-                    for(x = 0; x<nVerticesGoodman; x++){
-                        if(j != x)
-                            if(adjacenciaGoodman[j][x].getCusto() == -1)
-                                adjacenciaGoodman[j][x] = adjacenciaGoodman[i][x];
-                        adjacenciaGoodman[i][x] = new Aresta("NULL", -1);
-                    }
+        while(isGrafo(adjacenciaGoodman, nVerticesGoodman)){
+            for(int w = 0; w<nVerticesGoodman; w++){ //selecionando vertice
+                if(!visitados[w]){
+                    i = w;
+                    nComponentesConexo++;
+                    visitados[w] = true;
+                    w = nVerticesGoodman;
                 }                
-                j++;
             }
-            i++;
-            j = 0;
-            if(flag)
-                nComponentesConexo++;  
-            
-            
-            
-            
-            
-            for(int w = 0; w<nVerticesGoodman; w++){
-                for(int y = 0; y<nVerticesGoodman; y++){
-                    if(adjacenciaGoodman[w][y].getCusto() != -1){
-                        System.out.printf("1 ");
-                    }
-                    else
-                        System.out.printf("0 ");
+            for(int j = 0; j<nVerticesGoodman; j++){ // enquanto tiver adjacentes
+                if(adjacenciaGoodman[i][j].getCusto() != -1){                                        
+                    for(int w = 0; w<nVerticesGoodman; w++){
+                        if(i != j){
+                            adjacenciaGoodman[i][j] = adjacenciaGoodman[j][w];                                
+                        }
+                        adjacenciaGoodman[j][w] = new Aresta("NULL", -1);                                
+                        adjacenciaGoodman[w][j] = new Aresta("NULL", -1);                        
+                    }                     
+                    j = 0;
                 }
-                System.out.println("");
+                
+            }                                        
+            printAA(adjacenciaGoodman, nVerticesGoodman);
+            System.out.println(nComponentesConexo+" "+i);
+            for(int w = 0; w<visitados.length; w++){                
+                System.out.println(visitados[w]);
             }
+
+                              
         }
         
+        int cont = 0;
+        
+        //nComponentesConexo+=cont;
         System.out.println(nComponentesConexo);
         
         
