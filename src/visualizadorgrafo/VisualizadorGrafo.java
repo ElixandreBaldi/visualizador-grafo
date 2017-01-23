@@ -64,6 +64,21 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
     }
     
+    protected void reset(){
+        // reinicia tudo para criar/abrir novos arquivos
+        fileLocation = "";
+        vertices = new Vertice[0];
+        adjacencia = new Aresta[0][0];
+        nVertices = 0;
+        this.setTitle("Visualizador Grafo");
+        painelGrafo.removeAll();
+        itemEditar.setEnabled(true);
+        itemBusca.setEnabled(true);
+        subItemArquivoSalvar.setEnabled(true);
+        redraw = true;
+        repaint();
+    }
+    
     protected void analisaLinha(String text, boolean isAresta) throws Exception {   
         if(!isAresta){ //vertice  
             int  dado, i = 0, id = 0, coordX = 0, coordY = 0, flag = 0;
@@ -204,6 +219,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         painelGrafo.setBackground(new java.awt.Color(254, 254, 254));
         painelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
+        painelGrafo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout painelGrafoLayout = new javax.swing.GroupLayout(painelGrafo);
         painelGrafo.setLayout(painelGrafoLayout);
@@ -220,6 +236,11 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         subItemArquivoNovo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         subItemArquivoNovo.setText("Novo");
+        subItemArquivoNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemArquivoNovoActionPerformed(evt);
+            }
+        });
         itemArquivo.add(subItemArquivoNovo);
 
         subItemArquivoAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
@@ -233,6 +254,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         subItemArquivoSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         subItemArquivoSalvar.setText("Salvar");
+        subItemArquivoSalvar.setEnabled(false);
         subItemArquivoSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 subItemArquivoSalvarActionPerformed(evt);
@@ -251,8 +273,14 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         menuPrincipal.add(itemArquivo);
 
         itemEditar.setText("Editar");
+        itemEditar.setEnabled(false);
 
         subItemEditarInserirVertice.setText("Inserir vértice");
+        subItemEditarInserirVertice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditarInserirVerticeActionPerformed(evt);
+            }
+        });
         itemEditar.add(subItemEditarInserirVertice);
 
         subItemEditarInserirAresta.setText("Inserir aresta");
@@ -267,8 +295,14 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         menuPrincipal.add(itemEditar);
 
         itemBusca.setText("Busca");
+        itemBusca.setEnabled(false);
 
         subItemBuscaLargura.setText("Busca em largura");
+        subItemBuscaLargura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemBuscaLarguraActionPerformed(evt);
+            }
+        });
         itemBusca.add(subItemBuscaLargura);
 
         subItemBuscaProfundidade.setText("Busca em profundidade");
@@ -332,6 +366,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         int returnVal = selectArquivo.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION)
         {
+            reset();
             Charset inputCharset = Charset.forName("ISO-8859-1");
             try
             {
@@ -374,6 +409,50 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
 
+    private void subItemEditarInserirVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirVerticeActionPerformed
+        int x, y;
+        String rotulo = JOptionPane.showInputDialog(painelGrafo,
+                        "Rótulo", null);
+        String xString = JOptionPane.showInputDialog(painelGrafo,
+                        "Coordenada X", null);
+        try{
+            x = Integer.parseInt(xString);
+        } catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        String yString = JOptionPane.showInputDialog(painelGrafo,
+                        "Coordenada Y", null);
+        try{
+            y = Integer.parseInt(yString);
+        } catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
+        nVertices++; // incrementa o número de vértices
+        vertices = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
+        System.arraycopy(tmp, 0, vertices, 0, tmp.length); // copia o array temporário para o novo
+        Vertice novoVertice = new Vertice(nVertices, x, y, rotulo); // cria um novo vértice
+        vertices[nVertices-1] = novoVertice; // insere o novo vértice na listagem
+        //desenha o vértice na tela:
+        javax.swing.JLabel novoLabel = new javax.swing.JLabel(rotulo, javax.swing.JLabel.CENTER);
+        novoLabel.setBounds(x, y, novoLabel.getPreferredSize().width, novoLabel.getPreferredSize().height);
+        novoLabel.setForeground(Color.blue);
+        painelGrafo.add(novoLabel);
+        SwingUtilities.updateComponentTreeUI(this);
+    }//GEN-LAST:event_subItemEditarInserirVerticeActionPerformed
+
+    private void subItemArquivoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoNovoActionPerformed
+        reset();
+    }//GEN-LAST:event_subItemArquivoNovoActionPerformed
+
+    private void subItemBuscaLarguraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaLarguraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_subItemBuscaLarguraActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -410,9 +489,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
     
     private String fileLocation;
-    private Vertice[] vertices = new Vertice[0];
+    private Vertice[] vertices;
     private Aresta[][] adjacencia;
-    private int nVertices = 0;
+    private int nVertices;
     private boolean redraw = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
