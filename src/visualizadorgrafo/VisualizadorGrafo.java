@@ -305,6 +305,11 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         itemEditar.add(subItemEditarRemoverVertice);
 
         subItemEditarRemoverAresta.setText("Remover aresta");
+        subItemEditarRemoverAresta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditarRemoverArestaActionPerformed(evt);
+            }
+        });
         itemEditar.add(subItemEditarRemoverAresta);
 
         menuPrincipal.add(itemEditar);
@@ -516,6 +521,31 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         redraw = true;
         repaint();
     }//GEN-LAST:event_subItemEditarInserirArestaActionPerformed
+
+    private void subItemEditarRemoverArestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarRemoverArestaActionPerformed
+        int origem, destino;
+        String origemString = JOptionPane.showInputDialog(painelGrafo,
+                "ID de Origem", null);
+        try {
+            origem = Integer.parseInt(origemString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        String destinoString = JOptionPane.showInputDialog(painelGrafo,
+                "ID de Destino", null);
+        try {
+            destino = Integer.parseInt(destinoString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        adjacencia[origem][destino] = new Aresta("NULL", -1);
+        redraw = true;
+        repaint();
+    }//GEN-LAST:event_subItemEditarRemoverArestaActionPerformed
 
     /**
      * @param args the command line arguments
