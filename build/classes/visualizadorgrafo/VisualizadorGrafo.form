@@ -18,6 +18,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Novo"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subItemArquivoNovoActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="subItemArquivoAbrir">
               <Properties>
@@ -36,6 +39,7 @@
                   <KeyStroke key="Ctrl+S"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Salvar"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subItemArquivoSalvarActionPerformed"/>
@@ -54,12 +58,16 @@
         <Menu class="javax.swing.JMenu" name="itemEditar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Editar"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="subItemEditarInserirVertice">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Inserir v&#xe9;rtice"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subItemEditarInserirVerticeActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="subItemEditarInserirAresta">
               <Properties>
@@ -78,18 +86,29 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Remover aresta"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subItemEditarRemoverArestaActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="itemBusca">
           <Properties>
+<<<<<<< HEAD
             <Property name="text" type="java.lang.String" value="Algoritmos"/>
+=======
+            <Property name="text" type="java.lang.String" value="Busca"/>
+            <Property name="enabled" type="boolean" value="false"/>
+>>>>>>> master
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="subItemBuscaLargura">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Busca em largura"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subItemBuscaLarguraActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="subItemBuscaProfundidade">
               <Properties>
@@ -217,6 +236,10 @@
             <LineBorder thickness="0"/>
           </Border>
         </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor em Forma de M&#xe3;o"/>
+        </Property>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
 
       <Layout>

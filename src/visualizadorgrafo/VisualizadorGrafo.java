@@ -15,81 +15,114 @@ import static java.lang.Character.getNumericValue;
 import javax.swing.SwingUtilities;
 
 public class VisualizadorGrafo extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form VisualizadorGrafo
      */
     public VisualizadorGrafo() {
         initComponents();
-        painelGrafo.addMouseListener(new MouseListener (){
+        painelGrafo.addMouseListener(new MouseListener() {
+            // À cada clique, a saída é o X/Y daquela posição
             @Override
             public void mouseClicked(MouseEvent e) {
-                int x=e.getX();
-                int y=e.getY();
-                System.out.println(x+","+y);
+                int x = e.getX();
+                int y = e.getY();
+                System.out.println(x + "," + y);
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
 
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
 
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
         });
     }
-    
+
     @Override
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
+        //função de sistema que desenha elementos na tela, fizemos um Override para desenhar as arestas que precisamos
         super.paint(g);
-        if(redraw){
+        if (redraw) {
             g = painelGrafo.getGraphics();
-            for(int i = 0; i<nVertices;i++){
-                for(int j = 0; j<nVertices; j++){
-                    if(adjacencia[i][j].getCusto() != -1){
+            for (int i = 0; i < nVertices; i++) { //desenha arestas
+                for (int j = 0; j < nVertices; j++) {
+                    if (adjacencia[i][j].getCusto() != -1) {
                         int x1, x2, y1, y2;
                         x1 = vertices[i].getCoordX();
                         y1 = vertices[i].getCoordY();
                         x2 = vertices[j].getCoordX();
                         y2 = vertices[j].getCoordY();
-                        g.drawLine(x1,y1,x2,y2);                        
+                        g.drawLine(x1, y1, x2, y2);
                     }
                 }
-            }            
+            }
             redraw = false;
         }
     }
-    
-    protected void analisaLinha(String text, boolean isAresta) throws Exception {   
-        if(!isAresta){ //vertice  
-            int  dado, i = 0, id = 0, coordX = 0, coordY = 0, flag = 0;
+
+    public void redrawVertices() {
+        //limpa o painel do grafo e reinsere todos os elementos, em seguida chama repaint() para reinserir arestas
+        painelGrafo.removeAll();
+        //desenha o vértice na tela:
+        for (int i = 0; i < nVertices; i++) {
+            javax.swing.JLabel novoLabel = new javax.swing.JLabel(vertices[i].getRotulo(), javax.swing.JLabel.CENTER);
+            novoLabel.setBounds(vertices[i].getCoordX(), vertices[i].getCoordY(), novoLabel.getPreferredSize().width, novoLabel.getPreferredSize().height);
+            novoLabel.setForeground(Color.blue);
+            novoLabel.setToolTipText(i + "");
+            painelGrafo.add(novoLabel);
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+        redraw = true;
+        repaint();
+    }
+
+    protected void reset() {
+        // reinicia tudo para criar/abrir novos arquivos
+        fileLocation = "";
+        vertices = new Vertice[0];
+        adjacencia = new Aresta[0][0];
+        nVertices = 0;
+        this.setTitle("Visualizador Grafo");
+        painelGrafo.removeAll();
+        painelGrafo.setEnabled(true);
+        itemEditar.setEnabled(true);
+        itemBusca.setEnabled(true);
+        subItemArquivoSalvar.setEnabled(true);
+        redraw = true;
+        repaint();
+    }
+
+    protected void analisaLinha(String text, boolean isAresta) throws Exception {
+        if (!isAresta) { //vertice  
+            int dado, i = 0, id = 0, coordX = 0, coordY = 0, flag = 1;
             String rotulo = "", textoRotulo = "";
-            // flags: 0 = id, 1 = rótulo, 2 = x, 3 = y
-            while(i < text.length())
-            {              
-                if(flag == 1){
-                    while(text.charAt(i) != ' '){                        
-                        textoRotulo +=text.charAt(i);
-                        i++;
-                    }                    
-                    rotulo = textoRotulo;
-                    
-                }else if(flag < 4)
-                {
-                    dado = 0;
-                    while(text.charAt(i) != ' '){                        
-                        int soma = getNumericValue(text.charAt(i));
-                        dado = (dado*10) + soma;
+            // flags: 1 = rótulo, 2 = x, 3 = y
+            while (i < text.length()) {
+                if (flag == 1) {
+                    while (text.charAt(i) != ' ') {
+                        textoRotulo += text.charAt(i);
                         i++;
                     }
-                    switch(flag){
-                        case 0:
-                            id = dado;
-                            break;
+                    rotulo = textoRotulo;
+
+                } else if (flag < 4) {
+                    dado = 0;
+                    while (text.charAt(i) != ' ') {
+                        int soma = getNumericValue(text.charAt(i));
+                        dado = (dado * 10) + soma;
+                        i++;
+                    }
+                    switch (flag) {
                         case 2:
                             coordX = dado;
                             break;
@@ -97,9 +130,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                             coordY = dado;
                             break;
                     }
-                }                
-                if(text.charAt(i)==' '){
-                    i++;                    
+                }
+                if (text.charAt(i) == ' ') {
+                    i++;
                 }
                 flag++;
             }
@@ -107,36 +140,26 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             nVertices++; // incrementa o número de vértices
             vertices = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
             System.arraycopy(tmp, 0, vertices, 0, tmp.length); // copia o array temporário para o novo
-            Vertice novoVertice = new Vertice(id, coordX, coordY, rotulo); // cria um novo vértice
-            vertices[nVertices-1] = novoVertice; // insere o novo vértice na listagem
-            //desenha o vértice na tela:
-            javax.swing.JLabel novoLabel = new javax.swing.JLabel(rotulo, javax.swing.JLabel.CENTER);
-            novoLabel.setBounds(coordX, coordY, novoLabel.getPreferredSize().width, novoLabel.getPreferredSize().height);
-            novoLabel.setForeground(Color.blue);
-            painelGrafo.add(novoLabel);
-            SwingUtilities.updateComponentTreeUI(this);
-        }
-        else{//aresta 
-           int i = 0, flag = 0, origem = 0, destino = 0, custo = 0, dado;
-           String textoRotulo = "", rotulo = "";
-           
-           while(i < text.length())
-           {
-               if(flag == 3){
-                    while(text.charAt(i) != ' '){                        
-                        textoRotulo +=text.charAt(i);
+            Vertice novoVertice = new Vertice(coordX, coordY, rotulo); // cria um novo vértice
+            vertices[nVertices - 1] = novoVertice; // insere o novo vértice na listagem
+        } else {//aresta 
+            int i = 0, flag = 0, origem = 0, destino = 0, custo = 0, dado;
+            String textoRotulo = "", rotulo = "";
+            while (i < text.length()) {
+                if (flag == 3) {
+                    while (text.charAt(i) != ' ') {
+                        textoRotulo += text.charAt(i);
                         i++;
-                    }                    
-                    rotulo = textoRotulo;                    
-               }
-               else if(flag < 4){
+                    }
+                    rotulo = textoRotulo;
+                } else if (flag < 4) {
                     dado = 0;
-                    while(text.charAt(i) != ' '){                        
+                    while (text.charAt(i) != ' ') {
                         int soma = getNumericValue(text.charAt(i));
-                        dado = (dado*10) + soma;
+                        dado = (dado * 10) + soma;
                         i++;
-                    }                    
-                    switch(flag){
+                    }
+                    switch (flag) {
                         case 0:
                             origem = dado;
                             break;
@@ -147,17 +170,17 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                             custo = dado;
                             break;
                     }
-               }
-               if(text.charAt(i)==' '){
-                    i++;                    
-               }
-               flag++;
-           }       
-           Aresta a = new Aresta(rotulo, custo);
-           adjacencia[origem-1][destino-1]=a;
-           adjacencia[destino-1][origem-1]=a;
+                }
+                if (text.charAt(i) == ' ') {
+                    i++;
+                }
+                flag++;
+            }
+            Aresta a = new Aresta(rotulo, custo);
+            adjacencia[origem-1][destino-1] = a;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -206,6 +229,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         painelGrafo.setBackground(new java.awt.Color(254, 254, 254));
         painelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
+        painelGrafo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        painelGrafo.setEnabled(false);
 
         javax.swing.GroupLayout painelGrafoLayout = new javax.swing.GroupLayout(painelGrafo);
         painelGrafo.setLayout(painelGrafoLayout);
@@ -222,6 +247,11 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         subItemArquivoNovo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         subItemArquivoNovo.setText("Novo");
+        subItemArquivoNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemArquivoNovoActionPerformed(evt);
+            }
+        });
         itemArquivo.add(subItemArquivoNovo);
 
         subItemArquivoAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
@@ -235,6 +265,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         subItemArquivoSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         subItemArquivoSalvar.setText("Salvar");
+        subItemArquivoSalvar.setEnabled(false);
         subItemArquivoSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 subItemArquivoSalvarActionPerformed(evt);
@@ -253,8 +284,14 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         menuPrincipal.add(itemArquivo);
 
         itemEditar.setText("Editar");
+        itemEditar.setEnabled(false);
 
         subItemEditarInserirVertice.setText("Inserir vértice");
+        subItemEditarInserirVertice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditarInserirVerticeActionPerformed(evt);
+            }
+        });
         itemEditar.add(subItemEditarInserirVertice);
 
         subItemEditarInserirAresta.setText("Inserir aresta");
@@ -269,13 +306,24 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         itemEditar.add(subItemEditarRemoverVertice);
 
         subItemEditarRemoverAresta.setText("Remover aresta");
+        subItemEditarRemoverAresta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditarRemoverArestaActionPerformed(evt);
+            }
+        });
         itemEditar.add(subItemEditarRemoverAresta);
 
         menuPrincipal.add(itemEditar);
 
         itemBusca.setText("Algoritmos");
+        itemBusca.setEnabled(false);
 
         subItemBuscaLargura.setText("Busca em largura");
+        subItemBuscaLargura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemBuscaLarguraActionPerformed(evt);
+            }
+        });
         itemBusca.add(subItemBuscaLargura);
 
         subItemBuscaProfundidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
@@ -335,7 +383,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void subItemArquivoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSairActionPerformed
         System.exit(0);
     }//GEN-LAST:event_subItemArquivoSairActionPerformed
@@ -354,27 +402,30 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
         String conteudo = "", line;
         int returnVal = selectArquivo.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION)
-        {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            reset();
             Charset inputCharset = Charset.forName("ISO-8859-1");
-            try
-            {
+            try {
                 File file = selectArquivo.getSelectedFile();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), inputCharset));
                 fileLocation = file.getAbsolutePath();
                 this.setTitle("Visualizador Grafo - " + file.getName());
                 boolean isAresta = false;
-                while ((line = reader.readLine()) != null){
-                    if (line.length()>2)
-                        if  (line.charAt(0)=='/')
-                            if  (line.charAt(1)=='/')
+                while ((line = reader.readLine()) != null) {
+                    if (line.length() > 2) {
+                        if (line.charAt(0) == '/') {
+                            if (line.charAt(1) == '/') {
                                 continue;
-                    if (line.isEmpty()){
+                            }
+                        }
+                    }
+                    if (line.isEmpty()) {
+                        redrawVertices();
                         isAresta = true;
-                        adjacencia = new Aresta[nVertices][nVertices];                        
-                        for(int i=0;i<nVertices;i++){                            
-                            for(int j = 0; j<nVertices; j++){
-                                adjacencia[i][j]= new Aresta("NULL",-1);
+                        adjacencia = new Aresta[nVertices][nVertices];
+                        for (int i = 0; i < nVertices; i++) {
+                            for (int j = 0; j < nVertices; j++) {
+                                adjacencia[i][j] = new Aresta("NULL", -1);
                             }
                         }
                         continue;
@@ -383,9 +434,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 }
                 reader.close();
                 System.out.println("Leitura bem-sucedida.");
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Erro ao carregar arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
                 System.err.println(e);
             }
@@ -473,10 +522,124 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
+                                                       
+    private void subItemEditarInserirVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirVerticeActionPerformed
+        int x, y;
+        String rotulo = JOptionPane.showInputDialog(painelGrafo,
+                "Rótulo", null);
+        String xString = JOptionPane.showInputDialog(painelGrafo,
+                "Coordenada X", null);
+        try {
+            x = Integer.parseInt(xString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        String yString = JOptionPane.showInputDialog(painelGrafo,
+                "Coordenada Y", null);
+        try {
+            y = Integer.parseInt(yString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        nVertices++; // incrementa o número de vértices
+        Aresta[][] tmp = adjacencia;
+        adjacencia = new Aresta[nVertices][nVertices];
+        for (int i = 0; i < nVertices - 1; i++) {
+            System.arraycopy(tmp[i], 0, adjacencia[i], 0, nVertices - 1);
+        }
+        for (int i = 0; i < nVertices; i++) {
+            adjacencia[i][nVertices - 1] = new Aresta("NULL", -1);
+        }
+        for (int i = 0; i < nVertices; i++) {
+            adjacencia[nVertices - 1][i] = new Aresta("NULL", -1);
+        }
+        Vertice[] tmp2 = vertices; // copia o array vértice atual para um temporário
+        vertices = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
+        System.arraycopy(tmp2, 0, vertices, 0, tmp2.length); // copia o array temporário para o novo
+        Vertice novoVertice = new Vertice(x, y, rotulo); // cria um novo vértice
+        vertices[nVertices - 1] = novoVertice; // insere o novo vértice na listagem
+        
+        redrawVertices();
+    }//GEN-LAST:event_subItemEditarInserirVerticeActionPerformed
+
+    private void subItemArquivoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoNovoActionPerformed
+        reset();
+    }//GEN-LAST:event_subItemArquivoNovoActionPerformed
+
+    private void subItemBuscaLarguraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaLarguraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_subItemBuscaLarguraActionPerformed
 
     private void subItemEditarInserirArestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirArestaActionPerformed
-        // TODO add your handling code here:
+        int custo, origem, destino;
+        String rotulo = JOptionPane.showInputDialog(painelGrafo,
+                "Rótulo", null);
+        String custoString = JOptionPane.showInputDialog(painelGrafo,
+                "Custo", null);
+        try {
+            custo = Integer.parseInt(custoString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        String origemString = JOptionPane.showInputDialog(painelGrafo,
+                "ID de Origem", null);
+        try {
+            origem = Integer.parseInt(origemString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        String destinoString = JOptionPane.showInputDialog(painelGrafo,
+                "ID de Destino", null);
+        try {
+            destino = Integer.parseInt(destinoString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        try {
+            Aresta a = new Aresta(rotulo, custo);
+            adjacencia[origem][destino] = a;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+        }
+        redraw = true;
+        repaint();
     }//GEN-LAST:event_subItemEditarInserirArestaActionPerformed
+
+    private void subItemEditarRemoverArestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarRemoverArestaActionPerformed
+        int origem, destino;
+        String origemString = JOptionPane.showInputDialog(painelGrafo,
+                "ID de Origem", null);
+        try {
+            origem = Integer.parseInt(origemString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        String destinoString = JOptionPane.showInputDialog(painelGrafo,
+                "ID de Destino", null);
+        try {
+            destino = Integer.parseInt(destinoString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        adjacencia[origem][destino] = new Aresta("NULL", -1);
+        redraw = true;
+        repaint();
+    }//GEN-LAST:event_subItemEditarRemoverArestaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -507,16 +670,16 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {                
+            public void run() {
                 new VisualizadorGrafo().setVisible(true);
             }
         });
     }
-    
+
     private String fileLocation;
-    private Vertice[] vertices = new Vertice[0];
+    private Vertice[] vertices;
     private Aresta[][] adjacencia;
-    private int nVertices = 0;
+    private int nVertices;
     private boolean redraw = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
