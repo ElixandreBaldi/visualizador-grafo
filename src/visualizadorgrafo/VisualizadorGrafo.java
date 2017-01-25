@@ -577,7 +577,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         for (int i=0;i<id;i++)
             vertices[i] = tmp[i]; //copia a primeira parte do array, antes do elemento excluido
         if (id < nVertices)
-            for (int i=id+1;i<nVertices;i++)
+            for (int i=id+1;i<nVertices+1;i++)
                 vertices[i-1] = tmp[i]; //copia a segunda parte do array, depois do elemento excluido
         //Apaga arestas do nodo excluído
         Aresta[][] tmp2 = adjacencia;
