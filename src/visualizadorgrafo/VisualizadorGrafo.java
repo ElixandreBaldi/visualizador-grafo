@@ -258,6 +258,11 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         itemEditar.add(subItemEditarInserirVertice);
 
         subItemEditarInserirAresta.setText("Inserir aresta");
+        subItemEditarInserirAresta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditarInserirArestaActionPerformed(evt);
+            }
+        });
         itemEditar.add(subItemEditarInserirAresta);
 
         subItemEditarRemoverVertice.setText("Remover vértice");
@@ -273,6 +278,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         subItemBuscaLargura.setText("Busca em largura");
         itemBusca.add(subItemBuscaLargura);
 
+        subItemBuscaProfundidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
         subItemBuscaProfundidade.setText("Busca em profundidade");
         subItemBuscaProfundidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -333,9 +339,16 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private void subItemArquivoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSairActionPerformed
         System.exit(0);
     }//GEN-LAST:event_subItemArquivoSairActionPerformed
-
+    
     private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
         // TODO add your handling code here:
+        int noInformado;
+        noInformado = 0; // entrada
+        Busca B = new Busca(noInformado, nVertices, adjacencia);
+        int[] vetor = B.profundidade(noInformado);
+        for(int i = 0; i<nVertices; i++)
+            System.out.println(vetor[i]);
+        
     }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
 
     private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
@@ -407,61 +420,63 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
         System.out.println("");
     }
+    
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
-        
-        
-        
         Vertice[] verticesGoodman = vertices;
         Aresta[][] adjacenciaGoodman = adjacencia;
-        int nVerticesGoodman = nVertices, nComponentesConexo = 0;
-        int i = 0;        
-        int x = 0;
-        printAA(adjacenciaGoodman, nVerticesGoodman);
-        boolean flag = false;
-        boolean[] visitados = new boolean[nVerticesGoodman];        
-        for(int w = 0; w<visitados.length;w++)
-            visitados[w] = false;
-        visitados[0] = true;
+        int nComponentesConexo = 0;
+        printAA(adjacenciaGoodman, nVertices);        
+        boolean[] visitados = new boolean[nVertices];                
+        int visita = 0;
+        int[] pilhaVisita = new int[nVertices];
+        int[] continuacao = new int[nVertices];
+        int ipilha = 0;
         
-        while(isGrafo(adjacenciaGoodman, nVerticesGoodman)){
-            for(int w = 0; w<nVerticesGoodman; w++){ //selecionando vertice
-                if(!visitados[w]){
-                    i = w;
-                    nComponentesConexo++;
-                    visitados[w] = true;
-                    w = nVerticesGoodman;
-                }                
-            }
-            for(int j = 0; j<nVerticesGoodman; j++){ // enquanto tiver adjacentes
-                if(adjacenciaGoodman[i][j].getCusto() != -1){                                        
-                    for(int w = 0; w<nVerticesGoodman; w++){
-                        if(i != j){
-                            adjacenciaGoodman[i][j] = adjacenciaGoodman[j][w];                                
-                        }
-                        adjacenciaGoodman[j][w] = new Aresta("NULL", -1);                                
-                        adjacenciaGoodman[w][j] = new Aresta("NULL", -1);                        
-                    }                     
-                    j = 0;
-                }
-                
-            }                                        
-            printAA(adjacenciaGoodman, nVerticesGoodman);
-            System.out.println(nComponentesConexo+" "+i);
-            for(int w = 0; w<visitados.length; w++){                
-                System.out.println(visitados[w]);
-            }
-
-                              
+        for (int i = 0; i<nVertices; i++){
+            pilhaVisita[i] = -1;
+            continuacao[i] = 0;
         }
         
-        int cont = 0;
+        //while(isGrafo(adjacenciaGoodman, nVertices)){            
+            
+        //}
+        for(int i = 0; i<nVertices; i++){//escolhe qualquer um que não foi visitado
+            if(visitados[i]){
+                visita = i;
+                i = nVertices;
+            }
+            
+        }        
+        
+        do{
+            for(int i = continuacao[visita]; i<nVertices; i++){
+                if(adjacenciaGoodman[visita][i].getCusto() != -1 && i != visita && !visitados[visita]){
+                    pilhaVisita[ipilha] = visita;
+                    continuacao[visita] = i;
+                    ipilha++;
+                    visita = i;
+                    i = continuacao[visita];
+                }
+                for (int j = 0; j<nVertices; j++){
+                    System.out.println(pilhaVisita[j]);
+                }
+            }
+            
+            
+        }while(true);
+        
+        
         
         //nComponentesConexo+=cont;
-        System.out.println(nComponentesConexo);
+        //System.out.println(nComponentesConexo);
         
         
         
     }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
+
+    private void subItemEditarInserirArestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirArestaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_subItemEditarInserirArestaActionPerformed
 
     /**
      * @param args the command line arguments
