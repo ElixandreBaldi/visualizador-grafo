@@ -389,6 +389,25 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_subItemArquivoSairActionPerformed
     
+    private boolean isEuleriano(){
+        int cont;
+        if(QtdComponentesConexo == 1){
+            for(int i = 0; i<nVertices; i++){
+                cont = 0;
+                for(int j = 0; j<nVertices; j++){
+                    if(adjacencia[i][j].getCusto() != -1)
+                        cont++;
+                }
+                if(cont%2 != 0)
+                    return false;
+            }
+        }
+        else
+            return false;
+        
+        return true;
+    }
+    
     private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
         // TODO add your handling code here:
         int noInformado;
@@ -406,9 +425,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         int[] vetor = B.profundidade(noInformado);
         for(int i = 0; i<nVertices; i++)
             System.out.println(vetor[i]);
-        
     }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
-
+    
     private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
         String conteudo = "", line;
         int returnVal = selectArquivo.showOpenDialog(this);
@@ -457,8 +475,6 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
     
-    
-    
     boolean isGrafo(Aresta[][] grafo, int n){
         for(int i = 0; i<n; i++)
             for(int j = 0; j<n; j++)
@@ -468,22 +484,14 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
     
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
-        Vertice[] verticesGoodman = vertices;
         Aresta[][] adjacenciaGoodman = adjacencia;
-        int nComponentesConexo = 0;
+        int nComponentesConexo = 0, visita = 0, primeiro = 0;
+        boolean[] visitados = new boolean[nVertices];
+        boolean flag = false;
         
-        
-        boolean[] visitados = new boolean[nVertices];                
-        int visita = 0;
-        
-                
-        int primeiro = 0;
-        boolean flag= false;
         while(isGrafo(adjacenciaGoodman, nVertices)){            
             Busca B = new Busca(nVertices, adjacenciaGoodman);
-            
-            for(int i = 0; i<nVertices; i++)
-                System.out.println(visitados[i]);
+        
             for(int i = 0; i<nVertices; i++){//escolhe qualquer um que não foi visitado                
                 if(!visitados[i]){
                     visita = i;
@@ -521,8 +529,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             if(!visitados[i])
                 nComponentesConexo++;
         }
-            
-        System.out.println("Componentes Conexos: "+nComponentesConexo);
+        QtdComponentesConexo = nComponentesConexo;    
+        System.out.println("Componentes Conexos: "+nComponentesConexo);//ALERT              
+        System.out.println("Euleriano: "+isEuleriano());//ALERT
         
     }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
                                                        
@@ -684,6 +693,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private Aresta[][] adjacencia;
     private int nVertices;
     private boolean redraw = false;
+    private int QtdComponentesConexo = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
     private javax.swing.JMenu itemBusca;

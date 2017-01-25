@@ -48,8 +48,6 @@ public class Busca {
     }
     int[] profundidade(int no){
         int visita = no;
-        System.out.println("estou em:"+visita);
-        printAA(adjacencia, nVertices);
         for(int i = 0; i<nVertices; i++){
             if(adjacencia[visita][i].getCusto() != -1 && i != visita && !visitados[i]){                                                        
                 if(!presenteVetorBusca(visita))
@@ -66,9 +64,6 @@ public class Busca {
         
         return vetorBusca;
     }
-    
-    
-    
     
     void printAA(Aresta[][] adjacenciaGoodman, int nVerticesGoodman){
         for(int w = 0; w<nVerticesGoodman; w++){
