@@ -10,25 +10,34 @@ package visualizadorgrafo;
  * @author elixandre
  */
 public class Busca {
-    int noInformado;
     int[] vetorBusca;
     int iVetor;
     int nVertices;
     Aresta[][] adjacencia;
     boolean[] visitados;
     
-    Busca(int no, int n, Aresta[][]adja){
+    Busca(int n, Aresta[][]adja){
         vetorBusca = new int[n];
         visitados = new boolean[n];
         iVetor = 0;
-        nVertices = n;
-        noInformado = no;
+        nVertices = n;        
         adjacencia = adja;
         for(int i = 0; i<nVertices; i++){
             visitados[i] = false;
             vetorBusca[i] = -1;
         }
     }
+    Aresta[][] getAdjacencia(){
+        return adjacencia;
+    }
+    
+    boolean[] getVisitados(){
+        return visitados;
+    }
+    void setVisitados(boolean[] v){
+        visitados = v;
+    }
+    
     boolean presenteVetorBusca(int x){
         for(int i = 0; i<nVertices; i++){
             if(vetorBusca[i] == x)
@@ -39,19 +48,10 @@ public class Busca {
     }
     int[] profundidade(int no){
         int visita = no;
-        
-        
+        System.out.println("estou em:"+visita);
+        printAA(adjacencia, nVertices);
         for(int i = 0; i<nVertices; i++){
-            /*System.out.printf("em %d: ",visita);
-            for(int j = 0; j<nVertices; j++){
-                System.out.printf("%b ",visitados[j]);
-            }
-            System.out.println("");
-            */
-                
-                
-            if(adjacencia[visita][i].getCusto() != -1 && i != visita && !visitados[i]){                                        
-                /*System.out.println("entrou? "+visitados[i]+" "+i);*/
+            if(adjacencia[visita][i].getCusto() != -1 && i != visita && !visitados[i]){                                                        
                 if(!presenteVetorBusca(visita))
                     vetorBusca[iVetor] = visita;
                 iVetor++;
@@ -65,5 +65,22 @@ public class Busca {
             vetorBusca[iVetor] = visita;
         
         return vetorBusca;
+    }
+    
+    
+    
+    
+    void printAA(Aresta[][] adjacenciaGoodman, int nVerticesGoodman){
+        for(int w = 0; w<nVerticesGoodman; w++){
+            for(int y = 0; y<nVerticesGoodman; y++){
+                if(adjacenciaGoodman[w][y].getCusto() != -1){
+                    System.out.printf("1 ");
+                }
+                else
+                    System.out.printf("0 ");
+            }
+            System.out.println("");
+        }
+        System.out.println("");
     }
 }
