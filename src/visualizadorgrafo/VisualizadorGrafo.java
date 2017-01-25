@@ -302,6 +302,11 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         itemEditar.add(subItemEditarInserirAresta);
 
         subItemEditarRemoverVertice.setText("Remover vértice");
+        subItemEditarRemoverVertice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditarRemoverVerticeActionPerformed(evt);
+            }
+        });
         itemEditar.add(subItemEditarRemoverVertice);
 
         subItemEditarRemoverAresta.setText("Remover aresta");
@@ -542,10 +547,55 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             System.err.println(e);
             return;
         }
-        adjacencia[origem][destino] = new Aresta("NULL", -1);
+        try {
+            adjacencia[origem][destino] = new Aresta("NULL", -1);
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+        }
         redraw = true;
         repaint();
     }//GEN-LAST:event_subItemEditarRemoverArestaActionPerformed
+
+    private void subItemEditarRemoverVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarRemoverVerticeActionPerformed
+        int id;
+        String idString = JOptionPane.showInputDialog(painelGrafo,
+                "ID", null);
+        try {
+            id = Integer.parseInt(idString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        if (id < 0 || id >= nVertices){
+            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        nVertices--;
+        Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
+        vertices = new Vertice[nVertices];
+        for (int i=0;i<id;i++)
+            vertices[i] = tmp[i]; //copia a primeira parte do array, antes do elemento excluido
+        if (id < nVertices)
+            for (int i=id+1;i<nVertices;i++)
+                vertices[i-1] = tmp[i]; //copia a segunda parte do array, depois do elemento excluido
+        //Apaga arestas do nodo excluído
+        Aresta[][] tmp2 = adjacencia;
+        adjacencia = new Aresta[nVertices][nVertices];
+        for (int i=0; i<id;i++) // primeiro quadrante
+            for (int j=0; j<id; j++)
+                adjacencia[i][j] = tmp2[i][j];
+        for (int i=id+1; i<nVertices+1;i++) // segundo quadrante
+            for (int j=0; j<id; j++)
+                adjacencia[i-1][j] = tmp2[i][j];
+        for (int i=0; i<id;i++) // terceiro quadrante
+            for (int j=id+1; j<nVertices+1; j++)
+                adjacencia[i][j-1] = tmp2[i][j];
+        for (int i=id+1; i<nVertices+1;i++) // quarto quadrante
+            for (int j=id+1; j<nVertices+1; j++)
+                adjacencia[i-1][j-1] = tmp2[i][j];
+        redrawVertices();
+    }//GEN-LAST:event_subItemEditarRemoverVerticeActionPerformed
 
     /**
      * @param args the command line arguments
