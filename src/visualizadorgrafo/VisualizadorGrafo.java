@@ -57,7 +57,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         if (redraw) {
             g = painelGrafo.getGraphics();
             for (int i = 0; i < nVertices; i++) { //desenha arestas
-                for (int j = 0; j < nVertices && i <= j; j++) {
+                for (int j = i; j < nVertices; j++) {
                     if (adjacencia[i][j].getCusto() != -1) {
                         int x1, x2, y1, y2;
                         x1 = vertices[i].getCoordX();
@@ -562,10 +562,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
         output += "\n";
         for (int i = 0; i < nVertices; i++) {
-            for (int j = 0; j < nVertices && i <= j; j++) {
+            for (int j = i; j < nVertices; j++) {
                 if (adjacencia[i][j].getCusto() != -1) {
                     output += (i+1) + " " + (j+1) + " " + adjacencia[i][j].getCusto() + " '" + adjacencia[i][j].getRotulo() + "'\n";
-                    System.out.println(adjacencia[i][j].getRotulo());
                 }
             }
         }
