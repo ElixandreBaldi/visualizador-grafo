@@ -97,8 +97,12 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="itemBusca">
           <Properties>
+<<<<<<< HEAD
+            <Property name="text" type="java.lang.String" value="Algoritmos"/>
+=======
             <Property name="text" type="java.lang.String" value="Busca"/>
             <Property name="enabled" type="boolean" value="false"/>
+>>>>>>> master
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="subItemBuscaLargura">
@@ -111,6 +115,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="subItemBuscaProfundidade">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+B"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Busca em profundidade"/>
               </Properties>
               <Events>
@@ -126,6 +133,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Custo M&#xed;nimo (Dijkstra)"/>
               </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="subItemAlgoritmosGoodman">
+              <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+G"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Goodman"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subItemAlgoritmosGoodmanActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

@@ -178,7 +178,6 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
             Aresta a = new Aresta(rotulo, custo);
             adjacencia[origem-1][destino-1] = a;
-            adjacencia[destino-1][origem-1] = a;
         }
     }
 
@@ -304,11 +303,6 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         itemEditar.add(subItemEditarInserirAresta);
 
         subItemEditarRemoverVertice.setText("Remover vértice");
-        subItemEditarRemoverVertice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemEditarRemoverVerticeActionPerformed(evt);
-            }
-        });
         itemEditar.add(subItemEditarRemoverVertice);
 
         subItemEditarRemoverAresta.setText("Remover aresta");
@@ -321,8 +315,12 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
 
         menuPrincipal.add(itemEditar);
 
+<<<<<<< HEAD
         itemBusca.setText("Algoritmos");
+=======
+        itemBusca.setText("Busca");
         itemBusca.setEnabled(false);
+>>>>>>> master
 
         subItemBuscaLargura.setText("Busca em largura");
         subItemBuscaLargura.addActionListener(new java.awt.event.ActionListener() {
@@ -394,44 +392,17 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_subItemArquivoSairActionPerformed
     
-    private boolean isEuleriano(){
-        int cont;
-        if(QtdComponentesConexo == 1){
-            for(int i = 0; i<nVertices; i++){
-                cont = 0;
-                for(int j = 0; j<nVertices; j++){
-                    if(adjacencia[i][j].getCusto() != -1)
-                        cont++;
-                }
-                if(cont%2 != 0)
-                    return false;
-            }
-        }
-        else
-            return false;
-        
-        return true;
-    }
-    
     private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
         // TODO add your handling code here:
         int noInformado;
-        
-        String xString = JOptionPane.showInputDialog(painelGrafo,
-                "Informe o nó de início", null);
-        try {
-            noInformado = Integer.parseInt(xString);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-            System.err.println(e);
-            return;
-        }
-        Busca B = new Busca(nVertices, adjacencia);
+        noInformado = 0; // entrada
+        Busca B = new Busca(noInformado, nVertices, adjacencia);
         int[] vetor = B.profundidade(noInformado);
         for(int i = 0; i<nVertices; i++)
             System.out.println(vetor[i]);
+        
     }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
-    
+
     private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
         String conteudo = "", line;
         int returnVal = selectArquivo.showOpenDialog(this);
@@ -480,6 +451,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
     
+    
+    
     boolean isGrafo(Aresta[][] grafo, int n){
         for(int i = 0; i<n; i++)
             for(int j = 0; j<n; j++)
@@ -487,59 +460,77 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                     return true;
         return false;
     }
+    void printAA(Aresta[][] adjacenciaGoodman, int nVerticesGoodman){
+        for(int w = 0; w<nVerticesGoodman; w++){
+            for(int y = 0; y<nVerticesGoodman; y++){
+                if(adjacenciaGoodman[w][y].getCusto() != -1){
+                    System.out.printf("1 ");
+                }
+                else
+                    System.out.printf("0 ");
+            }
+            System.out.println("");
+        }
+        System.out.println("");
+    }
     
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
+        Vertice[] verticesGoodman = vertices;
         Aresta[][] adjacenciaGoodman = adjacencia;
-        int nComponentesConexo = 0, visita = 0, primeiro = 0;
-        boolean[] visitados = new boolean[nVertices];
-        boolean flag = false;
+        int nComponentesConexo = 0;
+        printAA(adjacenciaGoodman, nVertices);        
+        boolean[] visitados = new boolean[nVertices];                
+        int visita = 0;
+        int[] pilhaVisita = new int[nVertices];
+        int[] continuacao = new int[nVertices];
+        int ipilha = 0;
         
-        while(isGrafo(adjacenciaGoodman, nVertices)){            
-            Busca B = new Busca(nVertices, adjacenciaGoodman);
+        for (int i = 0; i<nVertices; i++){
+            pilhaVisita[i] = -1;
+            continuacao[i] = 0;
+        }
         
-            for(int i = 0; i<nVertices; i++){//escolhe qualquer um que não foi visitado                
-                if(!visitados[i]){
+        //while(isGrafo(adjacenciaGoodman, nVertices)){            
+            
+        //}
+        for(int i = 0; i<nVertices; i++){//escolhe qualquer um que não foi visitado
+            if(visitados[i]){
+                visita = i;
+                i = nVertices;
+            }
+            
+        }        
+        
+        do{
+            for(int i = continuacao[visita]; i<nVertices; i++){
+                if(adjacenciaGoodman[visita][i].getCusto() != -1 && i != visita && !visitados[visita]){
+                    pilhaVisita[ipilha] = visita;
+                    continuacao[visita] = i;
+                    ipilha++;
                     visita = i;
-                    i = nVertices;
+                    i = continuacao[visita];
                 }
-                
-                int conexos[] = B.profundidade(visita);                
-                primeiro = conexos[0];
-                flag = true;
-                for(int j = 0; j<nVertices; j++){
-                    if(conexos[j]!=-1)
-                        visitados[conexos[j]] = true;
-                }
-                for(int j = 1; j <nVertices; j++){
-                    if(conexos[j] != -1){
-                        for(int w = 0; w < nVertices; w++){
-                            if(adjacenciaGoodman[primeiro][w].getCusto() < adjacenciaGoodman[conexos[j]][w].getCusto()){
-                                adjacenciaGoodman[primeiro][w] = adjacenciaGoodman[conexos[j]][w];
-                            }
-                            adjacenciaGoodman[conexos[j]][w] = new Aresta("NULL", -1);
-                        }
-                    }
+                for (int j = 0; j<nVertices; j++){
+                    System.out.println(pilhaVisita[j]);
                 }
             }
-            nComponentesConexo++;
             
-            if(flag){
-                for(int i = 0; i<nVertices; i++)
-                    adjacenciaGoodman[primeiro][i] = new Aresta("NULL", -1);
-            }            
-            flag = false;
-        }
+            
+        }while(true);
         
-        for(int i = 0; i<nVertices; i++){
-            if(!visitados[i])
-                nComponentesConexo++;
-        }
-        QtdComponentesConexo = nComponentesConexo;    
-        System.out.println("Componentes Conexos: "+nComponentesConexo);//ALERT              
-        System.out.println("Euleriano: "+isEuleriano());//ALERT
+        
+        
+        //nComponentesConexo+=cont;
+        //System.out.println(nComponentesConexo);
+        
+        
         
     }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
-                                                       
+
+    private void subItemEditarInserirArestaActionPerformed(java.awt.event.ActionEvent evt) {                                                           
+        // TODO add your handling code here:
+    }                                                          
+
     private void subItemEditarInserirVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirVerticeActionPerformed
         int x, y;
         String rotulo = JOptionPane.showInputDialog(painelGrafo,
@@ -653,55 +644,10 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             System.err.println(e);
             return;
         }
-        try {
-            adjacencia[origem][destino] = new Aresta("NULL", -1);
-        }catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
-            System.err.println(e);
-        }
+        adjacencia[origem][destino] = new Aresta("NULL", -1);
         redraw = true;
         repaint();
     }//GEN-LAST:event_subItemEditarRemoverArestaActionPerformed
-
-    private void subItemEditarRemoverVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarRemoverVerticeActionPerformed
-        int id;
-        String idString = JOptionPane.showInputDialog(painelGrafo,
-                "ID", null);
-        try {
-            id = Integer.parseInt(idString);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-            System.err.println(e);
-            return;
-        }
-        if (id < 0 || id >= nVertices){
-            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-        nVertices--;
-        Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
-        vertices = new Vertice[nVertices];
-        for (int i=0;i<id;i++)
-            vertices[i] = tmp[i]; //copia a primeira parte do array, antes do elemento excluido
-        if (id < nVertices)
-            for (int i=id+1;i<nVertices+1;i++)
-                vertices[i-1] = tmp[i]; //copia a segunda parte do array, depois do elemento excluido
-        //Apaga arestas do nodo excluído
-        Aresta[][] tmp2 = adjacencia;
-        adjacencia = new Aresta[nVertices][nVertices];
-        for (int i=0; i<id;i++) // primeiro quadrante
-            for (int j=0; j<id; j++)
-                adjacencia[i][j] = tmp2[i][j];
-        for (int i=id+1; i<nVertices+1;i++) // segundo quadrante
-            for (int j=0; j<id; j++)
-                adjacencia[i-1][j] = tmp2[i][j];
-        for (int i=0; i<id;i++) // terceiro quadrante
-            for (int j=id+1; j<nVertices+1; j++)
-                adjacencia[i][j-1] = tmp2[i][j];
-        for (int i=id+1; i<nVertices+1;i++) // quarto quadrante
-            for (int j=id+1; j<nVertices+1; j++)
-                adjacencia[i-1][j-1] = tmp2[i][j];
-        redrawVertices();
-    }//GEN-LAST:event_subItemEditarRemoverVerticeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -743,7 +689,6 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private Aresta[][] adjacencia;
     private int nVertices;
     private boolean redraw = false;
-    private int QtdComponentesConexo = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
     private javax.swing.JMenu itemBusca;
