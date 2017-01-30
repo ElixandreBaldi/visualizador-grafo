@@ -97,12 +97,8 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="itemBusca">
           <Properties>
-<<<<<<< HEAD
             <Property name="text" type="java.lang.String" value="Algoritmos"/>
-=======
-            <Property name="text" type="java.lang.String" value="Busca"/>
             <Property name="enabled" type="boolean" value="false"/>
->>>>>>> master
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="subItemBuscaLargura">
