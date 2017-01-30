@@ -13,27 +13,29 @@ public class Busca {
     int[] vetorBusca;
     int iVetor;
     int nVertices;
-    Aresta[][] adjacencia;
+    Aresta[][] adjacenciaBusca;
     boolean[] visitados;
     
-    Busca(int n, Aresta[][]adja){
+    Busca(int n, Aresta[][] adja){
         vetorBusca = new int[n];
         visitados = new boolean[n];
         iVetor = 0;
         nVertices = n;        
-        adjacencia = adja;
+        adjacenciaBusca = adja;
         for(int i = 0; i<nVertices; i++){
             visitados[i] = false;
             vetorBusca[i] = -1;
         }
     }
+    
     Aresta[][] getAdjacencia(){
-        return adjacencia;
+        return adjacenciaBusca;
     }
     
     boolean[] getVisitados(){
         return visitados;
     }
+    
     void setVisitados(boolean[] v){
         visitados = v;
     }
@@ -46,10 +48,11 @@ public class Busca {
         return false;
        
     }
+    
     int[] profundidade(int no){
         int visita = no;
         for(int i = 0; i<nVertices; i++){
-            if(adjacencia[visita][i].getCusto() != -1 && i != visita && !visitados[i]){                                                        
+            if(adjacenciaBusca[visita][i].getCusto() != -1 && i != visita && !visitados[i]){                                                        
                 if(!presenteVetorBusca(visita))
                     vetorBusca[iVetor] = visita;
                 iVetor++;
@@ -66,8 +69,8 @@ public class Busca {
     }
     
     void printAA(Aresta[][] adjacenciaGoodman, int nVerticesGoodman){
-        for(int w = 0; w<nVerticesGoodman; w++){
-            for(int y = 0; y<nVerticesGoodman; y++){
+        for(int w = 0; w < nVerticesGoodman; w++){
+            for(int y = 0; y < nVerticesGoodman; y++){
                 if(adjacenciaGoodman[w][y].getCusto() != -1){
                     System.out.printf("1 ");
                 }

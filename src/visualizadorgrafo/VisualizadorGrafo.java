@@ -11,8 +11,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import static java.lang.Character.getNumericValue;
 import javax.swing.SwingUtilities;
+import static java.lang.Character.getNumericValue;
 
 public class VisualizadorGrafo extends javax.swing.JFrame {
 
@@ -55,7 +55,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         if (redraw) {
             g = painelGrafo.getGraphics();
             for (int i = 0; i < nVertices; i++) { //desenha arestas
-                for (int j = 0; j < nVertices; j++) {
+                for (int j = 0; j < nVertices && i <= j; j++) {
                     if (adjacencia[i][j].getCusto() != -1) {
                         int x1, x2, y1, y2;
                         x1 = vertices[i].getCoordX();
@@ -68,6 +68,13 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
             redraw = false;
         }
+        /* goodman();
+        for (int i = 0; i < nVertices; i++){
+            for (int j =0; j < nVertices; j++){
+                System.out.print(adjacencia[i][j].getCusto() + " ");
+            }
+            System.out.println();
+        }*/
     }
 
     public void redrawVertices() {
@@ -80,10 +87,10 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             novoLabel.setForeground(Color.blue);
             novoLabel.setToolTipText(i + "");
             painelGrafo.add(novoLabel);
-        }
-        SwingUtilities.updateComponentTreeUI(this);
+        }        
+        SwingUtilities.updateComponentTreeUI(this);               
         redraw = true;
-        repaint();
+        repaint();    
     }
 
     protected void reset() {
@@ -97,9 +104,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         painelGrafo.setEnabled(true);
         itemEditar.setEnabled(true);
         itemBusca.setEnabled(true);
-        subItemArquivoSalvar.setEnabled(true);
-        redraw = true;
-        repaint();
+        subItemArquivoSalvar.setEnabled(true);        
+        redraw = true;                
+        repaint();        
     }
 
     protected void analisaLinha(String text, boolean isAresta) throws Exception {
@@ -396,14 +403,14 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     
     private boolean isEuleriano(){
         int cont;
-        if(QtdComponentesConexo == 1){
-            for(int i = 0; i<nVertices; i++){
+        if(qtdComponentesConexo == 1){
+            for(int i = 0; i < nVertices; i++){
                 cont = 0;
-                for(int j = 0; j<nVertices; j++){
+                for(int j = 0; j < nVertices; j++){
                     if(adjacencia[i][j].getCusto() != -1)
                         cont++;
                 }
-                if(cont%2 != 0)
+                if(cont % 2 != 0)
                     return false;
             }
         }
@@ -428,8 +435,14 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
         Busca B = new Busca(nVertices, adjacencia);
         int[] vetor = B.profundidade(noInformado);
-        for(int i = 0; i<nVertices; i++)
-            System.out.println(vetor[i]);
+        String msg = "";
+        for(int i = 0; i<nVertices; i++){
+            if (vetor[i] != -1){
+                if (i > 0) msg += "->";
+                msg += vertices[vetor[i]].getRotulo();         
+            }
+        }
+        JOptionPane.showMessageDialog(null, msg, "Busca em Profundidade", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
     
     private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
@@ -480,7 +493,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
     
-    boolean isGrafo(Aresta[][] grafo, int n){
+    private boolean isGrafo(Aresta[][] grafo, int n){
         for(int i = 0; i<n; i++)
             for(int j = 0; j<n; j++)
                 if(grafo[i][j].getCusto() != -1)
@@ -488,29 +501,26 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         return false;
     }
     
-    private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
+    private void goodman(){
         Aresta[][] adjacenciaGoodman = adjacencia;
         int nComponentesConexo = 0, visita = 0, primeiro = 0;
         boolean[] visitados = new boolean[nVertices];
         boolean flag = false;
-        
         while(isGrafo(adjacenciaGoodman, nVertices)){            
             Busca B = new Busca(nVertices, adjacenciaGoodman);
-        
-            for(int i = 0; i<nVertices; i++){//escolhe qualquer um que não foi visitado                
+            for(int i = 0; i < nVertices; i++){//escolhe qualquer um que não foi visitado                
                 if(!visitados[i]){
                     visita = i;
                     i = nVertices;
                 }
-                
                 int conexos[] = B.profundidade(visita);                
                 primeiro = conexos[0];
                 flag = true;
-                for(int j = 0; j<nVertices; j++){
-                    if(conexos[j]!=-1)
+                for(int j = 0; j < nVertices; j++){
+                    if(conexos[j] != -1)
                         visitados[conexos[j]] = true;
                 }
-                for(int j = 1; j <nVertices; j++){
+                for(int j = 1; j < nVertices; j++){
                     if(conexos[j] != -1){
                         for(int w = 0; w < nVertices; w++){
                             if(adjacenciaGoodman[primeiro][w].getCusto() < adjacenciaGoodman[conexos[j]][w].getCusto()){
@@ -522,22 +532,26 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 }
             }
             nComponentesConexo++;
-            
             if(flag){
                 for(int i = 0; i<nVertices; i++)
                     adjacenciaGoodman[primeiro][i] = new Aresta("NULL", -1);
             }            
             flag = false;
         }
-        
-        for(int i = 0; i<nVertices; i++){
+        for(int i = 0; i< nVertices; i++){
             if(!visitados[i])
                 nComponentesConexo++;
         }
-        QtdComponentesConexo = nComponentesConexo;    
-        System.out.println("Componentes Conexos: "+nComponentesConexo);//ALERT              
-        System.out.println("Euleriano: "+isEuleriano());//ALERT
-        
+        qtdComponentesConexo = nComponentesConexo;
+        lblConexos.setText("Componentes Conexos: " + nComponentesConexo);
+        if (isEuleriano())
+            lblEuleriano.setText("Euleriano");
+        else
+            lblEuleriano.setText("Não euleriano");
+    }
+    
+    private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
+        goodman();
     }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
                                                        
     private void subItemEditarInserirVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirVerticeActionPerformed
@@ -625,6 +639,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         try {
             Aresta a = new Aresta(rotulo, custo);
             adjacencia[origem][destino] = a;
+            adjacencia[destino][origem] = a;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
@@ -655,6 +670,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
         try {
             adjacencia[origem][destino] = new Aresta("NULL", -1);
+            adjacencia[destino][origem] = new Aresta("NULL", -1);
         }catch (Exception e) {
             JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
@@ -743,7 +759,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private Aresta[][] adjacencia;
     private int nVertices;
     private boolean redraw = false;
-    private int QtdComponentesConexo = 0;
+    private int qtdComponentesConexo = 0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu itemArquivo;
     private javax.swing.JMenu itemBusca;
