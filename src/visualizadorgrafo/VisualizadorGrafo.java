@@ -68,13 +68,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
             redraw = false;
         }
-        /* goodman();
-        for (int i = 0; i < nVertices; i++){
-            for (int j =0; j < nVertices; j++){
-                System.out.print(adjacencia[i][j].getCusto() + " ");
-            }
-            System.out.println();
-        }*/
+        goodman();        
     }
 
     public void redrawVertices() {
@@ -493,7 +487,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
     
-    private boolean isGrafo(Aresta[][] grafo, int n){
+    protected boolean isGrafo(Aresta[][] grafo, int n){
         for(int i = 0; i<n; i++)
             for(int j = 0; j<n; j++)
                 if(grafo[i][j].getCusto() != -1)
@@ -501,11 +495,19 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         return false;
     }
     
-    private void goodman(){
-        Aresta[][] adjacenciaGoodman = adjacencia;
+    protected void goodman(){
+        Aresta[][] adjacenciaGoodman = new Aresta[nVertices][nVertices];
+        
+        for(int i = 0; i<nVertices; i++){
+            for(int j = 0; j<nVertices; j++){
+                adjacenciaGoodman[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
+            }        
+        }
+        
         int nComponentesConexo = 0, visita = 0, primeiro = 0;
         boolean[] visitados = new boolean[nVertices];
         boolean flag = false;
+        
         while(isGrafo(adjacenciaGoodman, nVertices)){            
             Busca B = new Busca(nVertices, adjacenciaGoodman);
             for(int i = 0; i < nVertices; i++){//escolhe qualquer um que não foi visitado                
@@ -524,7 +526,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                     if(conexos[j] != -1){
                         for(int w = 0; w < nVertices; w++){
                             if(adjacenciaGoodman[primeiro][w].getCusto() < adjacenciaGoodman[conexos[j]][w].getCusto()){
-                                adjacenciaGoodman[primeiro][w] = adjacenciaGoodman[conexos[j]][w];
+                                adjacenciaGoodman[primeiro][w] = new Aresta(adjacenciaGoodman[conexos[j]][w].getRotulo(),adjacenciaGoodman[conexos[j]][w].getCusto());
                             }
                             adjacenciaGoodman[conexos[j]][w] = new Aresta("NULL", -1);
                         }
@@ -547,7 +549,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         if (isEuleriano())
             lblEuleriano.setText("Euleriano");
         else
-            lblEuleriano.setText("Não euleriano");
+            lblEuleriano.setText("Não euleriano");        
     }
     
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed

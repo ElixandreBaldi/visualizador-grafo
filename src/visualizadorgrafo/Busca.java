@@ -20,11 +20,14 @@ public class Busca {
         vetorBusca = new int[n];
         visitados = new boolean[n];
         iVetor = 0;
-        nVertices = n;        
-        adjacenciaBusca = adja;
+        nVertices = n;   
+        adjacenciaBusca = new Aresta[nVertices][nVertices];
         for(int i = 0; i<nVertices; i++){
             visitados[i] = false;
             vetorBusca[i] = -1;
+            for(int j = 0; j<nVertices; j++){
+                adjacenciaBusca[i][j] = new Aresta(adja[i][j].getRotulo(), adja[i][j].getCusto());
+            }
         }
     }
     
