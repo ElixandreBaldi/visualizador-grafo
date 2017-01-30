@@ -346,7 +346,13 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         });
         itemBusca.add(subItemBuscaFleury);
 
+        subItemBuscaDijkstra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
         subItemBuscaDijkstra.setText("Custo Mínimo (Dijkstra)");
+        subItemBuscaDijkstra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemBuscaDijkstraActionPerformed(evt);
+            }
+        });
         itemBusca.add(subItemBuscaDijkstra);
 
         subItemAlgoritmosGoodman.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
@@ -758,6 +764,47 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         else
             JOptionPane.showMessageDialog(null, "O Grafo não tem ciclo euleriano, pois ele não é euleriano.", "Erro", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_subItemBuscaFleuryActionPerformed
+    private void dikistra(int origem){
+        Aresta[][] adjacenciaDikistra = new Aresta[nVertices][nVertices];
+        for(int i= 0; i<nVertices; i++){
+            for(int j=0; j<nVertices; j++){
+                if(adjacencia[i][j].getCusto() != -1)
+                    adjacenciaDikistra[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
+                else 
+                    adjacenciaDikistra[i][j] = new Aresta("NULL", Integer.MAX_VALUE);
+            }
+        }
+        Integer dist[] = new Integer[nVertices];        
+        int fixo[] = new int[nVertices];
+        int faltam;
+        for(int i=0; i < nVertices; i++){
+            fixo[i]=0;
+            dist[i]=Integer.MAX_VALUE; 
+        }
+        dist[origem] = 0;
+        
+        for(faltam = nVertices; faltam > 0; faltam--){
+            int no = -1;
+            for(int i = 0; i < nVertices; i++)
+                if(fixo[i]==0 && (no==-1 || dist[i] < dist[no]))
+                    no = i;  
+            fixo[no] = 1;
+            
+            if(dist[no] >= Integer.MAX_VALUE)
+                break;
+            
+            for(int i=0; i<nVertices; i++){
+                if(dist[i] > dist[no]+adjacenciaDikistra[no][i].getCusto()){
+                    dist[i] = dist[no]+adjacenciaDikistra[no][i].getCusto();                      
+                }
+            }            
+        }
+        for(int i=0; i<nVertices; i++)
+            System.out.print("distancia entre "+origem+" para "+i+" = "+dist[i]);
+    }
+    private void subItemBuscaDijkstraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaDijkstraActionPerformed
+        dikistra(0);
+    }//GEN-LAST:event_subItemBuscaDijkstraActionPerformed
 
     /**
      * @param args the command line arguments

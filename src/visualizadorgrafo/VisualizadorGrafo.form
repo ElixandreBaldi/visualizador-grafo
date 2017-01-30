@@ -144,8 +144,14 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="subItemBuscaDijkstra">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+D"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Custo M&#xed;nimo (Dijkstra)"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="subItemBuscaDijkstraActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="subItemAlgoritmosGoodman">
               <Properties>

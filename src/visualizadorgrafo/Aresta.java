@@ -2,7 +2,7 @@ package visualizadorgrafo;
 
 public class Aresta {
     private String rotulo;
-    private int custo;
+    private Integer custo;
     
     Aresta(String R, int C){
         rotulo = R;
