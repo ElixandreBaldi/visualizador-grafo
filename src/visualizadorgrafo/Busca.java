@@ -10,6 +10,7 @@ package visualizadorgrafo;
  * @author elixandre
  */
 public class Busca {
+    int noInicial;
     int[] vetorBusca;
     int iVetor;
     int nVertices;
@@ -30,7 +31,9 @@ public class Busca {
             }
         }
     }
-    
+    void setNoInicial(int no){
+        noInicial = no;
+    }
     Aresta[][] getAdjacencia(){
         return adjacenciaBusca;
     }
@@ -48,8 +51,7 @@ public class Busca {
             if(vetorBusca[i] == x)
                 return true;        
         }
-        return false;
-       
+        return false;       
     }
     
     int[] profundidade(int no){
@@ -70,6 +72,28 @@ public class Busca {
         
         return vetorBusca;
     }
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     void printAA(Aresta[][] adjacenciaGoodman, int nVerticesGoodman){
         for(int w = 0; w < nVerticesGoodman; w++){

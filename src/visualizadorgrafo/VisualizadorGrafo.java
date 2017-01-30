@@ -68,7 +68,13 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
             redraw = false;
         }
-        goodman();        
+        goodman(); 
+        for(int i = 0; i<nVertices; i++){
+            for(int j = 0; j<nVertices; j++){
+                System.out.print(adjacencia[i][j].getCusto()+" ");
+            }
+            System.out.println("");
+        }
     }
 
     public void redrawVertices() {
@@ -342,7 +348,13 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         });
         itemBusca.add(subItemBuscaProfundidade);
 
+        subItemBuscaFleury.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         subItemBuscaFleury.setText("Ciclo Euleriano (Fleury)");
+        subItemBuscaFleury.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemBuscaFleuryActionPerformed(evt);
+            }
+        });
         itemBusca.add(subItemBuscaFleury);
 
         subItemBuscaDijkstra.setText("Custo Mínimo (Dijkstra)");
@@ -415,7 +427,6 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
     
     private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
-        // TODO add your handling code here:
         int noInformado;
         
         String xString = JOptionPane.showInputDialog(painelGrafo,
@@ -435,7 +446,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 if (i > 0) msg += "->";
                 msg += vertices[vetor[i]].getRotulo();         
             }
-        }
+        }       
         JOptionPane.showMessageDialog(null, msg, "Busca em Profundidade", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
     
@@ -721,6 +732,13 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         redrawVertices();
     }//GEN-LAST:event_subItemEditarRemoverVerticeActionPerformed
 
+    private void subItemBuscaFleuryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaFleuryActionPerformed
+        if(isEuleriano())
+            System.out.println("fazer");            
+        else
+            JOptionPane.showMessageDialog(null, "O Grafo não tem ciclo euleriano, pois ele não é euleriano.", "Erro", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_subItemBuscaFleuryActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -754,8 +772,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 new VisualizadorGrafo().setVisible(true);
             }
         });
-    }
-
+    }    
     private String fileLocation;
     private Vertice[] vertices;
     private Aresta[][] adjacencia;
