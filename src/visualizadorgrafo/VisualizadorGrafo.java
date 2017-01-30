@@ -7,6 +7,8 @@ import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import javax.swing.JFileChooser;
@@ -110,38 +112,26 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
 
     protected void analisaLinha(String text, boolean isAresta) throws Exception {
-        if (!isAresta) { //vertice  
-            int dado, i = 0, id = 0, coordX = 0, coordY = 0, flag = 1;
-            String rotulo = "", textoRotulo = "";
-            // flags: 1 = rótulo, 2 = x, 3 = y
-            while (i < text.length()) {
-                if (flag == 1) {
-                    while (text.charAt(i) != ' ') {
-                        textoRotulo += text.charAt(i);
-                        i++;
-                    }
-                    rotulo = textoRotulo;
-
-                } else if (flag < 4) {
-                    dado = 0;
-                    while (text.charAt(i) != ' ') {
-                        int soma = getNumericValue(text.charAt(i));
-                        dado = (dado * 10) + soma;
-                        i++;
-                    }
-                    switch (flag) {
-                        case 2:
-                            coordX = dado;
-                            break;
-                        case 3:
-                            coordY = dado;
-                            break;
-                    }
-                }
-                if (text.charAt(i) == ' ') {
+        if (!isAresta) { //vertice
+            int i = 0, coordX=0, coordY=0;
+            String rotulo = "";
+            if (text.charAt(i) == '\''){ //inicio do rotulo
+                i++;
+                while(text.charAt(i) != '\''){
+                    rotulo += text.charAt(i);
                     i++;
                 }
-                flag++;
+                i++; //fim do rotulo
+            }
+            if (text.charAt(i) == ' ') i++; //espaço entre rotulo e x
+            while (text.charAt(i)!=' '){
+                coordX = (coordX*10) + getNumericValue(text.charAt(i));
+                i++;
+            }
+            i++; //espaço entre x e y
+            while (text.charAt(i)!=';'){
+                coordY = (coordY*10) + getNumericValue(text.charAt(i));
+                i++;
             }
             Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
             nVertices++; // incrementa o número de vértices
@@ -149,39 +139,30 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             System.arraycopy(tmp, 0, vertices, 0, tmp.length); // copia o array temporário para o novo
             Vertice novoVertice = new Vertice(coordX, coordY, rotulo); // cria um novo vértice
             vertices[nVertices - 1] = novoVertice; // insere o novo vértice na listagem
-        } else {//aresta 
-            int i = 0, flag = 0, origem = 0, destino = 0, custo = 0, dado;
-            String textoRotulo = "", rotulo = "";
-            while (i < text.length()) {
-                if (flag == 3) {
-                    while (text.charAt(i) != ' ') {
-                        textoRotulo += text.charAt(i);
-                        i++;
-                    }
-                    rotulo = textoRotulo;
-                } else if (flag < 4) {
-                    dado = 0;
-                    while (text.charAt(i) != ' ') {
-                        int soma = getNumericValue(text.charAt(i));
-                        dado = (dado * 10) + soma;
-                        i++;
-                    }
-                    switch (flag) {
-                        case 0:
-                            origem = dado;
-                            break;
-                        case 1:
-                            destino = dado;
-                            break;
-                        case 2:
-                            custo = dado;
-                            break;
-                    }
-                }
-                if (text.charAt(i) == ' ') {
+        } else {//aresta
+            int i = 0, origem = 0, destino = 0, custo = 0;
+            String rotulo = "";
+            while (text.charAt(i) != ' '){
+                origem = (origem*10) + getNumericValue(text.charAt(i));
+                i++;
+            }
+            i++;
+            while (text.charAt(i) != ' '){
+                destino = (destino*10) + getNumericValue(text.charAt(i));
+                i++;
+            }
+            i++;
+            while (text.charAt(i) != ' '){
+                custo = (custo*10) + getNumericValue(text.charAt(i));
+                i++;
+            }
+            i++;
+            if (text.charAt(i)=='\''){
+                i++;
+                while (text.charAt(i) != '\''){
+                    rotulo += text.charAt(i);
                     i++;
                 }
-                flag++;
             }
             Aresta a = new Aresta(rotulo, custo);
             adjacencia[origem-1][destino-1] = a;
@@ -198,7 +179,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        selectArquivo = new javax.swing.JFileChooser();
+        selectAbrirArquivo = new javax.swing.JFileChooser();
+        selectSalvarArquivo = new javax.swing.JFileChooser();
         lblEuleriano = new javax.swing.JLabel();
         lblConexos = new javax.swing.JLabel();
         painelGrafo = new javax.swing.JPanel();
@@ -219,6 +201,13 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         subItemBuscaFleury = new javax.swing.JMenuItem();
         subItemBuscaDijkstra = new javax.swing.JMenuItem();
         subItemAlgoritmosGoodman = new javax.swing.JMenuItem();
+
+        selectAbrirArquivo.setDialogTitle("Abrir");
+
+        selectSalvarArquivo.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        selectSalvarArquivo.setApproveButtonText("Salvar");
+        selectSalvarArquivo.setApproveButtonToolTipText("Salvar");
+        selectSalvarArquivo.setDialogTitle("Salvar");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Visualizador Grafo");
@@ -452,12 +441,12 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     
     private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
         String conteudo = "", line;
-        int returnVal = selectArquivo.showOpenDialog(this);
+        int returnVal = selectAbrirArquivo.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             reset();
             Charset inputCharset = Charset.forName("ISO-8859-1");
             try {
-                File file = selectArquivo.getSelectedFile();
+                File file = selectAbrirArquivo.getSelectedFile();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), inputCharset));
                 fileLocation = file.getAbsolutePath();
                 this.setTitle("Visualizador Grafo - " + file.getName());
@@ -495,7 +484,20 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }//GEN-LAST:event_subItemArquivoAbrirActionPerformed
 
     private void subItemArquivoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSalvarActionPerformed
-        // TODO add your handling code here:
+        int returnVal = selectSalvarArquivo.showSaveDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                File file = selectSalvarArquivo.getSelectedFile();
+                FileWriter fw = new FileWriter(file + ".grafo");
+                fw.write(converteDadosParaArquivo());
+                fw.flush();
+                fileLocation = file.getAbsolutePath();
+                this.setTitle("Visualizador Grafo - " + file.getName());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
+                System.err.println(e);
+            }
+        }
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
     
     protected boolean isGrafo(Aresta[][] grafo, int n){
@@ -561,6 +563,24 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             lblEuleriano.setText("Euleriano");
         else
             lblEuleriano.setText("Não euleriano");        
+    }
+    
+    
+    protected String converteDadosParaArquivo(){
+        String output = "";
+        for (int i = 0; i < nVertices; i++){
+            output += "'" + vertices[i].getRotulo() + "' " + vertices[i].getCoordX() + " " + vertices[i].getCoordY() + ";\n";
+        }
+        output += "\n";
+        for (int i = 0; i < nVertices; i++) {
+            for (int j = 0; j < nVertices && i <= j; j++) {
+                if (adjacencia[i][j].getCusto() != -1) {
+                    output += (i+1) + " " + (j+1) + " " + adjacencia[i][j].getCusto() + " '" + adjacencia[i][j].getRotulo() + "'\n";
+                    System.out.println(adjacencia[i][j].getRotulo());
+                }
+            }
+        }
+        return output;
     }
     
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
@@ -787,7 +807,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     private javax.swing.JLabel lblEuleriano;
     private javax.swing.JMenuBar menuPrincipal;
     private javax.swing.JPanel painelGrafo;
-    private javax.swing.JFileChooser selectArquivo;
+    private javax.swing.JFileChooser selectAbrirArquivo;
+    private javax.swing.JFileChooser selectSalvarArquivo;
     private javax.swing.JMenuItem subItemAlgoritmosGoodman;
     private javax.swing.JMenuItem subItemArquivoAbrir;
     private javax.swing.JMenuItem subItemArquivoNovo;
