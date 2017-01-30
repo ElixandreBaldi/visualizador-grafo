@@ -1,6 +1,7 @@
 package visualizadorgrafo;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -57,7 +58,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         if (redraw) {
             g = painelGrafo.getGraphics();
             for (int i = 0; i < nVertices; i++) { //desenha arestas
-                for (int j = 0; j < nVertices && i <= j; j++) {
+                for (int j = i; j < nVertices; j++) {
                     if (adjacencia[i][j].getCusto() != -1) {
                         int x1, x2, y1, y2;
                         x1 = vertices[i].getCoordX();
@@ -67,21 +68,13 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                         g.drawLine(x1, y1, x2, y2);
                     }
                 }
-            }
+            }  
             redraw = false;
         }
-        goodman(); 
-        for(int i = 0; i<nVertices; i++){
-            for(int j = 0; j<nVertices; j++){
-                System.out.print(adjacencia[i][j].getCusto()+" ");
-            }
-            System.out.println("");
-        }
+        goodman(false);
     }
 
-    public void redrawVertices() {
-        //limpa o painel do grafo e reinsere todos os elementos, em seguida chama repaint() para reinserir arestas
-        painelGrafo.removeAll();
+    protected void redrawVertices() {
         //desenha o vértice na tela:
         for (int i = 0; i < nVertices; i++) {
             javax.swing.JLabel novoLabel = new javax.swing.JLabel(vertices[i].getRotulo(), javax.swing.JLabel.CENTER);
@@ -93,6 +86,23 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(this);               
         redraw = true;
         repaint();    
+    }
+    
+    protected void drawRotulosArestas() {
+        //limpa o painel do grafo e reinsere todos os elementos, em seguida chama repaint() para reinserir arestas
+        painelGrafo.removeAll();
+        for (int i = 0; i < nVertices; i++) { //desenha arestas
+            for (int j = i; j < nVertices; j++) {
+                if (adjacencia[i][j].getCusto() != -1) {
+                    javax.swing.JLabel lblRotulo = new javax.swing.JLabel(adjacencia[i][j].getRotulo(), javax.swing.JLabel.CENTER);
+                    lblRotulo.setBounds((vertices[i].getCoordX()+vertices[j].getCoordX())/2, (vertices[i].getCoordY()+vertices[j].getCoordY())/2, lblRotulo.getPreferredSize().width, lblRotulo.getPreferredSize().height);
+                    Font novaFonte = new Font(lblRotulo.getFont().getName(), lblRotulo.getFont().getStyle(), 10);
+                    lblRotulo.setFont(novaFonte);
+                    painelGrafo.add(lblRotulo);
+                }
+            }
+        }
+        redrawVertices();
     }
 
     protected void reset() {
@@ -441,8 +451,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 if (i > 0) msg += "->";
                 msg += vertices[vetor[i]].getRotulo();         
             }
-        }       
-        JOptionPane.showMessageDialog(null, msg, "Busca em Profundidade", JOptionPane.PLAIN_MESSAGE);
+        }
+        JOptionPane.showMessageDialog(null, msg, "Busca em Profundidade", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
     
     private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
@@ -466,7 +476,6 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                         }
                     }
                     if (line.isEmpty()) {
-                        redrawVertices();
                         isAresta = true;
                         adjacencia = new Aresta[nVertices][nVertices];
                         for (int i = 0; i < nVertices; i++) {
@@ -484,6 +493,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro ao carregar arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
                 System.err.println(e);
             }
+            drawRotulosArestas();
             redraw = true;
             repaint();
         }
@@ -514,7 +524,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         return false;
     }
     
-    protected void goodman(){
+    protected void goodman(boolean withAlert){
         Aresta[][] adjacenciaGoodman = new Aresta[nVertices][nVertices];
         
         for(int i = 0; i<nVertices; i++){
@@ -568,7 +578,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         if (isEuleriano())
             lblEuleriano.setText("Euleriano");
         else
-            lblEuleriano.setText("Não euleriano");        
+            lblEuleriano.setText("Não euleriano");
+        if (withAlert)
+            JOptionPane.showMessageDialog(null, "Componentes Conexos: " + nComponentesConexo, "Algoritmo de Goodman", JOptionPane.INFORMATION_MESSAGE);
     }
     
     
@@ -579,10 +591,9 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
         output += "\n";
         for (int i = 0; i < nVertices; i++) {
-            for (int j = 0; j < nVertices && i <= j; j++) {
+            for (int j = i; j < nVertices; j++) {
                 if (adjacencia[i][j].getCusto() != -1) {
                     output += (i+1) + " " + (j+1) + " " + adjacencia[i][j].getCusto() + " '" + adjacencia[i][j].getRotulo() + "'\n";
-                    System.out.println(adjacencia[i][j].getRotulo());
                 }
             }
         }
@@ -590,7 +601,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }
     
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
-        goodman();
+        goodman(true);
     }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
                                                        
     private void subItemEditarInserirVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirVerticeActionPerformed
@@ -632,8 +643,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         System.arraycopy(tmp2, 0, vertices, 0, tmp2.length); // copia o array temporário para o novo
         Vertice novoVertice = new Vertice(x, y, rotulo); // cria um novo vértice
         vertices[nVertices - 1] = novoVertice; // insere o novo vértice na listagem
-        
-        redrawVertices();
+        drawRotulosArestas();
     }//GEN-LAST:event_subItemEditarInserirVerticeActionPerformed
 
     private void subItemArquivoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoNovoActionPerformed
@@ -683,6 +693,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
         }
+        drawRotulosArestas();
         redraw = true;
         repaint();
     }//GEN-LAST:event_subItemEditarInserirArestaActionPerformed
@@ -714,6 +725,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
         }
+        drawRotulosArestas();
         redraw = true;
         repaint();
     }//GEN-LAST:event_subItemEditarRemoverArestaActionPerformed
@@ -755,7 +767,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         for (int i=id+1; i<nVertices+1;i++) // quarto quadrante
             for (int j=id+1; j<nVertices+1; j++)
                 adjacencia[i-1][j-1] = tmp2[i][j];
-        redrawVertices();
+        drawRotulosArestas();
     }//GEN-LAST:event_subItemEditarRemoverVerticeActionPerformed
 
     private void subItemBuscaFleuryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaFleuryActionPerformed
@@ -768,39 +780,55 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         Aresta[][] adjacenciaDikistra = new Aresta[nVertices][nVertices];
         for(int i= 0; i<nVertices; i++){
             for(int j=0; j<nVertices; j++){
-                if(adjacencia[i][j].getCusto() != -1)
+                if(i == j){
+                    adjacenciaDikistra[i][j] = new Aresta("NULL", 0);  
+                    continue;
+                }
+                if(adjacencia[i][j].getCusto() != -1)                    
                     adjacenciaDikistra[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
-                else 
-                    adjacenciaDikistra[i][j] = new Aresta("NULL", Integer.MAX_VALUE);
+                else                                         
+                    adjacenciaDikistra[i][j] = new Aresta("NULL", maximo);  
+                
             }
         }
-        Integer dist[] = new Integer[nVertices];        
+        double dist[] = new double[nVertices];        
         int fixo[] = new int[nVertices];
         int faltam;
+        String[] caminhos = new String[nVertices];        
         for(int i=0; i < nVertices; i++){
             fixo[i]=0;
-            dist[i]=Integer.MAX_VALUE; 
+            dist[i]=maximo; 
+            caminhos[i] = "";
         }
         dist[origem] = 0;
         
-        for(faltam = nVertices; faltam > 0; faltam--){
+        for(faltam = nVertices; faltam > 0; faltam--){            
             int no = -1;
             for(int i = 0; i < nVertices; i++)
                 if(fixo[i]==0 && (no==-1 || dist[i] < dist[no]))
-                    no = i;  
+                    no = i;                     
+                
             fixo[no] = 1;
             
-            if(dist[no] >= Integer.MAX_VALUE)
+            if(dist[no] >= maximo)
                 break;
             
             for(int i=0; i<nVertices; i++){
                 if(dist[i] > dist[no]+adjacenciaDikistra[no][i].getCusto()){
-                    dist[i] = dist[no]+adjacenciaDikistra[no][i].getCusto();                      
+                    dist[i] = dist[no]+adjacenciaDikistra[no][i].getCusto();
+                    String vazio = "";
+                    if(caminhos[no].equals(vazio))
+                        caminhos[i] += no+"->";
+                    else
+                        caminhos[i] += caminhos[no]+"->"+no+"->";
                 }
             }            
         }
-        for(int i=0; i<nVertices; i++)
-            System.out.print("distancia entre "+origem+" para "+i+" = "+dist[i]);
+        for(int i=0; i<nVertices; i++){
+            caminhos[i] += i;
+            System.out.print("distancia entre "+origem+" para "+i+" = "+dist[i]+" caminho: "+caminhos[i]);
+            System.out.println("");
+        }
     }
     private void subItemBuscaDijkstraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaDijkstraActionPerformed
         dikistra(0);
@@ -840,6 +868,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
         });
     }    
+    private final double maximo = Double.POSITIVE_INFINITY;
     private String fileLocation;
     private Vertice[] vertices;
     private Aresta[][] adjacencia;
