@@ -330,6 +330,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         itemBusca.setText("Algoritmos");
         itemBusca.setEnabled(false);
 
+        subItemBuscaLargura.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
         subItemBuscaLargura.setText("Busca em largura");
         subItemBuscaLargura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -743,6 +744,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
         if (id < 0 || id >= nVertices){
             JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         nVertices--;
         Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
@@ -776,27 +778,26 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         else
             JOptionPane.showMessageDialog(null, "O Grafo não tem ciclo euleriano, pois ele não é euleriano.", "Erro", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_subItemBuscaFleuryActionPerformed
-    private void dikistra(int origem){
-        Aresta[][] adjacenciaDikistra = new Aresta[nVertices][nVertices];
-        for(int i= 0; i<nVertices; i++){
+    private void dijkstra(int origem){
+        Aresta[][] adjacenciaDijkstra = new Aresta[nVertices][nVertices];
+        double dist[] = new double[nVertices]; // distancias entre a origem e cada indice deste vetor
+        boolean fixo[] = new boolean[nVertices]; //informa se o indice deste vetor já foi visitado
+        int faltam; //para movimentar o for
+        String[] caminhos = new String[nVertices]; // concatena-se o caminhos mais curto entre o indice do vetor e a variavel origem     
+        for(int i= 0; i<nVertices; i++){ //setar a tabela de adjacencia utilizada aqui
             for(int j=0; j<nVertices; j++){
                 if(i == j){
-                    adjacenciaDikistra[i][j] = new Aresta("NULL", 0);  
+                    adjacenciaDijkstra[i][j] = new Aresta("NULL", 0);  
                     continue;
                 }
                 if(adjacencia[i][j].getCusto() != -1)                    
-                    adjacenciaDikistra[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
+                    adjacenciaDijkstra[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
                 else                                         
-                    adjacenciaDikistra[i][j] = new Aresta("NULL", maximo);  
-                
+                    adjacenciaDijkstra[i][j] = new Aresta("NULL", maximo);                  
             }
-        }
-        double dist[] = new double[nVertices];        
-        int fixo[] = new int[nVertices];
-        int faltam;
-        String[] caminhos = new String[nVertices];        
-        for(int i=0; i < nVertices; i++){
-            fixo[i]=0;
+        }        
+        for(int i=0; i < nVertices; i++){//setar os valores
+            fixo[i]=false; 
             dist[i]=maximo; 
             caminhos[i] = "";
         }
@@ -805,33 +806,57 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         for(faltam = nVertices; faltam > 0; faltam--){            
             int no = -1;
             for(int i = 0; i < nVertices; i++)
-                if(fixo[i]==0 && (no==-1 || dist[i] < dist[no]))
+                if(!fixo[i] && (no==-1 || dist[i] < dist[no]))
                     no = i;                     
                 
-            fixo[no] = 1;
+            fixo[no] = true;
             
             if(dist[no] >= maximo)
                 break;
             
             for(int i=0; i<nVertices; i++){
-                if(dist[i] > dist[no]+adjacenciaDikistra[no][i].getCusto()){
-                    dist[i] = dist[no]+adjacenciaDikistra[no][i].getCusto();
+                if(dist[i] > dist[no]+adjacenciaDijkstra[no][i].getCusto()){
+                    dist[i] = dist[no]+adjacenciaDijkstra[no][i].getCusto();
                     String vazio = "";
                     if(caminhos[no].equals(vazio))
-                        caminhos[i] += no+"->";
+                        caminhos[i] += vertices[no].getRotulo()+"->";
                     else
-                        caminhos[i] += caminhos[no]+"->"+no+"->";
+                        caminhos[i] += caminhos[no]+vertices[no].getRotulo()+"->";
                 }
             }            
         }
+        String caminhosDijkstra = "Origem: "+vertices[origem].getRotulo()+"\n\n\n";
         for(int i=0; i<nVertices; i++){
-            caminhos[i] += i;
-            System.out.print("distancia entre "+origem+" para "+i+" = "+dist[i]+" caminho: "+caminhos[i]);
-            System.out.println("");
+            caminhos[i] += vertices[i].getRotulo();
+            if(i!=origem){
+                if(dist[i] >= Double.POSITIVE_INFINITY)
+                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = Nao existe\n";            
+                else
+                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = "+dist[i]+"\nCaminho com menor custo: "+caminhos[i]+"\n";            
+                if(i<nVertices-1)
+                    caminhosDijkstra+="\n";
+            }            
         }
+        JOptionPane.showMessageDialog(null, caminhosDijkstra, "Algoritmo Dijkstra", JOptionPane.INFORMATION_MESSAGE);
     }
     private void subItemBuscaDijkstraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaDijkstraActionPerformed
-        dikistra(0);
+        int noInformado;
+        
+        String xString = JOptionPane.showInputDialog(painelGrafo,
+                "Informe a ID do nó origem", null);
+        try {
+            noInformado = Integer.parseInt(xString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        if (noInformado < 0 || noInformado >= nVertices){
+            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        dijkstra(noInformado);
+        
     }//GEN-LAST:event_subItemBuscaDijkstraActionPerformed
 
     /**
