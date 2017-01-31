@@ -771,10 +771,23 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 adjacencia[i-1][j-1] = tmp2[i][j];
         drawRotulosArestas();
     }//GEN-LAST:event_subItemEditarRemoverVerticeActionPerformed
-
+    protected void cicloEuleriano(Aresta[][] adjacenciaEuleriano){
+        
+        int listaArestas[][] = new int[nVertices][nVertices];
+        int iVisitas = 0;
+        for(int i = 0; i<nVertices; i++)
+            for(int j = 0; j<nVertices; j++)
+                listaArestas[i][j] = -1;                
+        int noInformado = 0;
+        Busca cicloEuleriano = new Busca(nVertices,adjacenciaEuleriano,noInformado);
+        listaArestas = cicloEuleriano.cicloEuleriano(0);
+        
+        
+        
+    }
     private void subItemBuscaFleuryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaFleuryActionPerformed
         if(isEuleriano())
-            System.out.println("fazer");            
+            cicloEuleriano(adjacencia);
         else
             JOptionPane.showMessageDialog(null, "O Grafo não tem ciclo euleriano, pois ele não é euleriano.", "Erro", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_subItemBuscaFleuryActionPerformed

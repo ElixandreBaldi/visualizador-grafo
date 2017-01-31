@@ -31,6 +31,21 @@ public class Busca {
             }
         }
     }
+    Busca(int n, Aresta[][] adja, int inicio){
+        noInicial = inicio;
+        vetorCicloEuleriano = new int[n][n];
+        visitados = new boolean[n];
+        iVetor = 0;
+        nVertices = n;   
+        adjacenciaBusca = new Aresta[nVertices][nVertices];
+        for(int i = 0; i<nVertices; i++){
+            visitados[i] = false;
+            vetorBusca[i] = -1;
+            for(int j = 0; j<nVertices; j++){
+                adjacenciaBusca[i][j] = new Aresta(adja[i][j].getRotulo(), adja[i][j].getCusto());
+            }
+        }
+    }
     void setNoInicial(int no){
         noInicial = no;
     }
@@ -55,6 +70,26 @@ public class Busca {
     }
     
     int[] profundidade(int no){
+        int visita = no;
+        for(int i = 0; i<nVertices; i++){
+            if(adjacenciaBusca[visita][i].getCusto() != -1 && i != visita && !visitados[i]){                                                        
+                if(!presenteVetorBusca(visita))
+                    vetorBusca[iVetor] = visita;
+                iVetor++;
+                visitados[visita] = true;                
+                profundidade(i);
+            }            
+        }
+        if(!visitados[visita])
+            visitados[visita] = true;
+        if(!presenteVetorBusca(visita))
+            vetorBusca[iVetor] = visita;
+        
+        return vetorBusca;
+    }
+    
+    int[] cicloEuleriano(int no){
+        
         int visita = no;
         for(int i = 0; i<nVertices; i++){
             if(adjacenciaBusca[visita][i].getCusto() != -1 && i != visita && !visitados[i]){                                                        
