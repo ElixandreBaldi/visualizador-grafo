@@ -5,6 +5,8 @@
  */
 package visualizadorgrafo;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author elixandre
@@ -68,6 +70,28 @@ public class Busca {
         if(!presenteVetorBusca(visita))
             vetorBusca[iVetor] = visita;
         
+        return vetorBusca;
+    }
+    
+    int[] largura(int raiz){
+        iVetor = 0;
+        LinkedList<Integer> filaNos = new LinkedList<>(); // fila dos nós a serem impressos/explorados
+        filaNos.add(raiz);
+        visitados[raiz] = true;
+        while (!filaNos.isEmpty())
+        {
+            // Tira um nó da fila e o põe na lista de retorno
+            raiz = filaNos.poll(); // poll = retira o próximo elemento da fila
+            vetorBusca[iVetor] = raiz;
+            iVetor++;
+            for (int j=0;j<nVertices;j++)
+                if(adjacenciaBusca[raiz][j].getCusto() != -1)
+                    if (!visitados[j])
+                    {
+                        visitados[j] = true;
+                        filaNos.add(j);
+                    }
+        }
         return vetorBusca;
     }
     
