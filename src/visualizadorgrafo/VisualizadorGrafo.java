@@ -781,7 +781,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         int noInformado = 0;
         Busca cicloEuleriano = new Busca(nVertices,adjacenciaEuleriano,noInformado);
         listaArestas = cicloEuleriano.cicloEuleriano(0);
-        
+        for(int i = 0; i<nVertices; i++)
+            System.out.println(listaArestas[i][0]+" "+listaArestas[i][1]);
         
         
     }
