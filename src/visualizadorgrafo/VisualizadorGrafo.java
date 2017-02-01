@@ -179,7 +179,186 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             adjacencia[destino-1][origem-1] = a;
         }
     }
+    
+    protected boolean isEuleriano(){
+        int cont;
+        if(qtdComponentesConexo == 1){
+            for(int i = 0; i < nVertices; i++){
+                cont = 0;
+                for(int j = 0; j < nVertices; j++){
+                    if(adjacencia[i][j].getCusto() != -1)
+                        cont++;
+                }
+                if(cont % 2 != 0)
+                    return false;
+            }
+        }
+        else
+            return false;
+        
+        return true;
+    }
 
+    protected boolean isGrafo(Aresta[][] grafo, int n){
+        for(int i = 0; i<n; i++)
+            for(int j = 0; j<n; j++)
+                if(grafo[i][j].getCusto() != -1)
+                    return true;
+        return false;
+    }
+    
+    protected void goodman(boolean withAlert){
+        Aresta[][] adjacenciaGoodman = new Aresta[nVertices][nVertices];
+        
+        for(int i = 0; i<nVertices; i++){
+            for(int j = 0; j<nVertices; j++){
+                adjacenciaGoodman[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
+            }        
+        }
+        
+        int nComponentesConexo = 0, visita = 0, primeiro = 0;
+        boolean[] visitados = new boolean[nVertices];
+        boolean flag = false;
+        
+        while(isGrafo(adjacenciaGoodman, nVertices)){            
+            Busca B = new Busca(nVertices, adjacenciaGoodman);
+            for(int i = 0; i < nVertices; i++){//escolhe qualquer um que não foi visitado                
+                if(!visitados[i]){
+                    visita = i;
+                    i = nVertices;
+                }
+                int conexos[] = B.profundidade(visita);                
+                primeiro = conexos[0];
+                flag = true;
+                for(int j = 0; j < nVertices; j++){
+                    if(conexos[j] != -1)
+                        visitados[conexos[j]] = true;
+                }
+                for(int j = 1; j < nVertices; j++){
+                    if(conexos[j] != -1){
+                        for(int w = 0; w < nVertices; w++){
+                            if(adjacenciaGoodman[primeiro][w].getCusto() < adjacenciaGoodman[conexos[j]][w].getCusto()){
+                                adjacenciaGoodman[primeiro][w] = new Aresta(adjacenciaGoodman[conexos[j]][w].getRotulo(),adjacenciaGoodman[conexos[j]][w].getCusto());
+                            }
+                            adjacenciaGoodman[conexos[j]][w] = new Aresta("NULL", -1);
+                        }
+                    }
+                }
+            }
+            nComponentesConexo++;
+            if(flag){
+                for(int i = 0; i<nVertices; i++)
+                    adjacenciaGoodman[primeiro][i] = new Aresta("NULL", -1);
+            }            
+            flag = false;
+        }
+        for(int i = 0; i< nVertices; i++){
+            if(!visitados[i])
+                nComponentesConexo++;
+        }
+        qtdComponentesConexo = nComponentesConexo;
+        lblConexos.setText("Componentes Conexos: " + nComponentesConexo);
+        if (isEuleriano())
+            lblEuleriano.setText("Euleriano");
+        else
+            lblEuleriano.setText("Não euleriano");
+        if (withAlert)
+            JOptionPane.showMessageDialog(null, "Componentes Conexos: " + nComponentesConexo, "Algoritmo de Goodman", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    protected String converteDadosParaArquivo(){
+        String output = "";
+        for (int i = 0; i < nVertices; i++){
+            output += "'" + vertices[i].getRotulo() + "' " + vertices[i].getCoordX() + " " + vertices[i].getCoordY() + ";\n";
+        }
+        output += "\n";
+        for (int i = 0; i < nVertices; i++) {
+            for (int j = i; j < nVertices; j++) {
+                if (adjacencia[i][j].getCusto() != -1) {
+                    output += (i+1) + " " + (j+1) + " " + adjacencia[i][j].getCusto() + " '" + adjacencia[i][j].getRotulo() + "'\n";
+                }
+            }
+        }
+        return output;
+    }
+    
+    protected void dijkstra(int origem){
+        Aresta[][] adjacenciaDijkstra = new Aresta[nVertices][nVertices];
+        double dist[] = new double[nVertices]; // distancias entre a origem e cada indice deste vetor
+        boolean fixo[] = new boolean[nVertices]; //informa se o indice deste vetor já foi visitado
+        int faltam; //para movimentar o for
+        String[] caminhos = new String[nVertices]; // concatena-se o caminhos mais curto entre o indice do vetor e a variavel origem     
+        for(int i= 0; i<nVertices; i++){ //setar a tabela de adjacencia utilizada aqui
+            for(int j=0; j<nVertices; j++){
+                if(i == j){
+                    adjacenciaDijkstra[i][j] = new Aresta("NULL", 0);  
+                    continue;
+                }
+                if(adjacencia[i][j].getCusto() != -1)                    
+                    adjacenciaDijkstra[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
+                else                                         
+                    adjacenciaDijkstra[i][j] = new Aresta("NULL", maximo);                  
+            }
+        }        
+        for(int i=0; i < nVertices; i++){//setar os valores
+            fixo[i]=false; 
+            dist[i]=maximo; 
+            caminhos[i] = "";
+        }
+        dist[origem] = 0;
+        
+        for(faltam = nVertices; faltam > 0; faltam--){            
+            int no = -1;
+            for(int i = 0; i < nVertices; i++)
+                if(!fixo[i] && (no==-1 || dist[i] < dist[no]))
+                    no = i;                     
+                
+            fixo[no] = true;
+            
+            if(dist[no] >= maximo)
+                break;
+            
+            for(int i=0; i<nVertices; i++){
+                if(dist[i] > dist[no]+adjacenciaDijkstra[no][i].getCusto()){
+                    dist[i] = dist[no]+adjacenciaDijkstra[no][i].getCusto();
+                    String vazio = "";
+                    if(caminhos[no].equals(vazio))
+                        caminhos[i] += vertices[no].getRotulo()+"->";
+                    else
+                        caminhos[i] += caminhos[no]+vertices[no].getRotulo()+"->";
+                }
+            }            
+        }
+        String caminhosDijkstra = "Origem: "+vertices[origem].getRotulo()+"\n\n\n";
+        for(int i=0; i<nVertices; i++){
+            caminhos[i] += vertices[i].getRotulo();
+            if(i!=origem){
+                if(dist[i] >= Double.POSITIVE_INFINITY)
+                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = Nao existe\n";            
+                else
+                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = "+dist[i]+"\nCaminho com menor custo: "+caminhos[i]+"\n";            
+                if(i<nVertices-1)
+                    caminhosDijkstra+="\n";
+            }            
+        }
+        JOptionPane.showMessageDialog(null, caminhosDijkstra, "Algoritmo Dijkstra", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    protected void cicloEuleriano(Aresta[][] adjacenciaEuleriano){
+        int listaArestas[][] = new int[nVertices][nVertices];
+        int iVisitas = 0;
+        for(int i = 0; i<nVertices; i++)
+            for(int j = 0; j<nVertices; j++)
+                listaArestas[i][j] = -1;                
+        int noInformado = 0;
+        Busca cicloEuleriano = new Busca(nVertices,adjacenciaEuleriano,noInformado);
+        listaArestas = cicloEuleriano.cicloEuleriano(0);
+        for(int i = 0; i<nVertices; i++)
+            System.out.println(listaArestas[i][0]+" "+listaArestas[i][1]);
+        
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -413,25 +592,6 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_subItemArquivoSairActionPerformed
     
-    private boolean isEuleriano(){
-        int cont;
-        if(qtdComponentesConexo == 1){
-            for(int i = 0; i < nVertices; i++){
-                cont = 0;
-                for(int j = 0; j < nVertices; j++){
-                    if(adjacencia[i][j].getCusto() != -1)
-                        cont++;
-                }
-                if(cont % 2 != 0)
-                    return false;
-            }
-        }
-        else
-            return false;
-        
-        return true;
-    }
-    
     private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
         int noInformado;
         
@@ -516,91 +676,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
-    
-    protected boolean isGrafo(Aresta[][] grafo, int n){
-        for(int i = 0; i<n; i++)
-            for(int j = 0; j<n; j++)
-                if(grafo[i][j].getCusto() != -1)
-                    return true;
-        return false;
-    }
-    
-    protected void goodman(boolean withAlert){
-        Aresta[][] adjacenciaGoodman = new Aresta[nVertices][nVertices];
-        
-        for(int i = 0; i<nVertices; i++){
-            for(int j = 0; j<nVertices; j++){
-                adjacenciaGoodman[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
-            }        
-        }
-        
-        int nComponentesConexo = 0, visita = 0, primeiro = 0;
-        boolean[] visitados = new boolean[nVertices];
-        boolean flag = false;
-        
-        while(isGrafo(adjacenciaGoodman, nVertices)){            
-            Busca B = new Busca(nVertices, adjacenciaGoodman);
-            for(int i = 0; i < nVertices; i++){//escolhe qualquer um que não foi visitado                
-                if(!visitados[i]){
-                    visita = i;
-                    i = nVertices;
-                }
-                int conexos[] = B.profundidade(visita);                
-                primeiro = conexos[0];
-                flag = true;
-                for(int j = 0; j < nVertices; j++){
-                    if(conexos[j] != -1)
-                        visitados[conexos[j]] = true;
-                }
-                for(int j = 1; j < nVertices; j++){
-                    if(conexos[j] != -1){
-                        for(int w = 0; w < nVertices; w++){
-                            if(adjacenciaGoodman[primeiro][w].getCusto() < adjacenciaGoodman[conexos[j]][w].getCusto()){
-                                adjacenciaGoodman[primeiro][w] = new Aresta(adjacenciaGoodman[conexos[j]][w].getRotulo(),adjacenciaGoodman[conexos[j]][w].getCusto());
-                            }
-                            adjacenciaGoodman[conexos[j]][w] = new Aresta("NULL", -1);
-                        }
-                    }
-                }
-            }
-            nComponentesConexo++;
-            if(flag){
-                for(int i = 0; i<nVertices; i++)
-                    adjacenciaGoodman[primeiro][i] = new Aresta("NULL", -1);
-            }            
-            flag = false;
-        }
-        for(int i = 0; i< nVertices; i++){
-            if(!visitados[i])
-                nComponentesConexo++;
-        }
-        qtdComponentesConexo = nComponentesConexo;
-        lblConexos.setText("Componentes Conexos: " + nComponentesConexo);
-        if (isEuleriano())
-            lblEuleriano.setText("Euleriano");
-        else
-            lblEuleriano.setText("Não euleriano");
-        if (withAlert)
-            JOptionPane.showMessageDialog(null, "Componentes Conexos: " + nComponentesConexo, "Algoritmo de Goodman", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    
-    protected String converteDadosParaArquivo(){
-        String output = "";
-        for (int i = 0; i < nVertices; i++){
-            output += "'" + vertices[i].getRotulo() + "' " + vertices[i].getCoordX() + " " + vertices[i].getCoordY() + ";\n";
-        }
-        output += "\n";
-        for (int i = 0; i < nVertices; i++) {
-            for (int j = i; j < nVertices; j++) {
-                if (adjacencia[i][j].getCusto() != -1) {
-                    output += (i+1) + " " + (j+1) + " " + adjacencia[i][j].getCusto() + " '" + adjacencia[i][j].getRotulo() + "'\n";
-                }
-            }
-        }
-        return output;
-    }
-    
+ 
     private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
         goodman(true);
     }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
@@ -652,7 +728,26 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     }//GEN-LAST:event_subItemArquivoNovoActionPerformed
 
     private void subItemBuscaLarguraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaLarguraActionPerformed
-        // TODO add your handling code here:
+        int no;
+        String noString = JOptionPane.showInputDialog(painelGrafo,
+                "Nó Inicial", null);
+        try {
+            no = Integer.parseInt(noString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        Busca b = new Busca(nVertices, adjacencia);
+        int[] vetor = b.largura(no);
+        String msg = "";
+        for(int i = 0; i<nVertices; i++){
+            if (vetor[i] != -1){
+                if (i > 0) msg += "->";
+                msg += vertices[vetor[i]].getRotulo();         
+            }
+        }
+        JOptionPane.showMessageDialog(null, msg, "Busca em Largura", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_subItemBuscaLarguraActionPerformed
 
     private void subItemEditarInserirArestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirArestaActionPerformed
@@ -771,88 +866,14 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 adjacencia[i-1][j-1] = tmp2[i][j];
         drawRotulosArestas();
     }//GEN-LAST:event_subItemEditarRemoverVerticeActionPerformed
-    protected void cicloEuleriano(Aresta[][] adjacenciaEuleriano){
-        
-        int listaArestas[][] = new int[nVertices][nVertices];
-        int iVisitas = 0;
-        for(int i = 0; i<nVertices; i++)
-            for(int j = 0; j<nVertices; j++)
-                listaArestas[i][j] = -1;                
-        int noInformado = 0;
-        Busca cicloEuleriano = new Busca(nVertices,adjacenciaEuleriano,noInformado);
-        listaArestas = cicloEuleriano.cicloEuleriano(0);
-        for(int i = 0; i<nVertices; i++)
-            System.out.println(listaArestas[i][0]+" "+listaArestas[i][1]);
-        
-        
-    }
+       
     private void subItemBuscaFleuryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaFleuryActionPerformed
         if(isEuleriano())
             cicloEuleriano(adjacencia);
         else
             JOptionPane.showMessageDialog(null, "O Grafo não tem ciclo euleriano, pois ele não é euleriano.", "Erro", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_subItemBuscaFleuryActionPerformed
-    private void dijkstra(int origem){
-        Aresta[][] adjacenciaDijkstra = new Aresta[nVertices][nVertices];
-        double dist[] = new double[nVertices]; // distancias entre a origem e cada indice deste vetor
-        boolean fixo[] = new boolean[nVertices]; //informa se o indice deste vetor já foi visitado
-        int faltam; //para movimentar o for
-        String[] caminhos = new String[nVertices]; // concatena-se o caminhos mais curto entre o indice do vetor e a variavel origem     
-        for(int i= 0; i<nVertices; i++){ //setar a tabela de adjacencia utilizada aqui
-            for(int j=0; j<nVertices; j++){
-                if(i == j){
-                    adjacenciaDijkstra[i][j] = new Aresta("NULL", 0);  
-                    continue;
-                }
-                if(adjacencia[i][j].getCusto() != -1)                    
-                    adjacenciaDijkstra[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
-                else                                         
-                    adjacenciaDijkstra[i][j] = new Aresta("NULL", maximo);                  
-            }
-        }        
-        for(int i=0; i < nVertices; i++){//setar os valores
-            fixo[i]=false; 
-            dist[i]=maximo; 
-            caminhos[i] = "";
-        }
-        dist[origem] = 0;
         
-        for(faltam = nVertices; faltam > 0; faltam--){            
-            int no = -1;
-            for(int i = 0; i < nVertices; i++)
-                if(!fixo[i] && (no==-1 || dist[i] < dist[no]))
-                    no = i;                     
-                
-            fixo[no] = true;
-            
-            if(dist[no] >= maximo)
-                break;
-            
-            for(int i=0; i<nVertices; i++){
-                if(dist[i] > dist[no]+adjacenciaDijkstra[no][i].getCusto()){
-                    dist[i] = dist[no]+adjacenciaDijkstra[no][i].getCusto();
-                    String vazio = "";
-                    if(caminhos[no].equals(vazio))
-                        caminhos[i] += vertices[no].getRotulo()+"->";
-                    else
-                        caminhos[i] += caminhos[no]+vertices[no].getRotulo()+"->";
-                }
-            }            
-        }
-        String caminhosDijkstra = "Origem: "+vertices[origem].getRotulo()+"\n\n\n";
-        for(int i=0; i<nVertices; i++){
-            caminhos[i] += vertices[i].getRotulo();
-            if(i!=origem){
-                if(dist[i] >= Double.POSITIVE_INFINITY)
-                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = Nao existe\n";            
-                else
-                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = "+dist[i]+"\nCaminho com menor custo: "+caminhos[i]+"\n";            
-                if(i<nVertices-1)
-                    caminhosDijkstra+="\n";
-            }            
-        }
-        JOptionPane.showMessageDialog(null, caminhosDijkstra, "Algoritmo Dijkstra", JOptionPane.INFORMATION_MESSAGE);
-    }
     private void subItemBuscaDijkstraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaDijkstraActionPerformed
         int noInformado;
         
@@ -906,7 +927,8 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 new VisualizadorGrafo().setVisible(true);
             }
         });
-    }    
+    }
+    
     private final double maximo = Double.POSITIVE_INFINITY;
     private String fileLocation;
     private Vertice[] vertices;
