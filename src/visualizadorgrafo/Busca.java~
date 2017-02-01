@@ -128,14 +128,17 @@ public class Busca {
     
     boolean isConexo(){
         Aresta[][] adjacenciaGoodman = new Aresta[nVertices][nVertices];
+        
         for(int i = 0; i<nVertices; i++){
             for(int j = 0; j<nVertices; j++){
                 adjacenciaGoodman[i][j] = new Aresta(adjacenciaBusca[i][j].getRotulo(), adjacenciaBusca[i][j].getCusto());
             }        
         }
+        
         int nComponentesConexo = 0, visita = 0, primeiro = 0;
         boolean[] visitados = new boolean[nVertices];
         boolean flag = false;
+        
         while(isGrafo(adjacenciaGoodman, nVertices)){            
             Busca B = new Busca(nVertices, adjacenciaGoodman);
             for(int i = 0; i < nVertices; i++){//escolhe qualquer um que não foi visitado                
@@ -181,6 +184,7 @@ public class Busca {
     
     int[][] cicloEuleriano(int no){
         int visita = no;
+        
         for(int i = 0; i<nVertices; i++){
             Aresta tmp;
             if(adjacenciaBusca[visita][i].getCusto() != -1 && i != visita /*&& !visitados[i]*/){                                                        
@@ -192,9 +196,12 @@ public class Busca {
                     System.out.println("entrou");
                     vetorCicloEuleriano[iVetor][0] = visita;
                     vetorCicloEuleriano[iVetor][1] = i;
+
                     iVetor++;
                     /*visitados[visita] = true;*/
+
                     cicloEuleriano(i);
+                
                 }else{
                     adjacenciaBusca[visita][i] = new Aresta(tmp.getRotulo(),tmp.getCusto());
                     adjacenciaBusca[i][visita] = new Aresta(tmp.getRotulo(),tmp.getCusto());
