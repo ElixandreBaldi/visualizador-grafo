@@ -151,7 +151,19 @@ public class Busca {
         }
         return false;
     }
-    
+    int linhaVazia(){
+        int cont = 0;
+        for(int i = 0; i<nVertices; i++){
+            for(int j = 0; j<nVertices; j++){
+                if(adjacenciaBusca[i][j].getCusto()==-1)
+                    cont++;
+            }
+            if(cont == nVertices)    
+                return i;
+            cont = 0;
+        }
+        return -1;
+    }
     int[][] cicloEuleriano(int no){
         int visita = no;
         
@@ -161,7 +173,24 @@ public class Busca {
                 tmp = new Aresta(adjacenciaBusca[visita][i].getRotulo(),adjacenciaBusca[visita][i].getCusto());
                 adjacenciaBusca[visita][i] = new Aresta("NULL",-1);
                 adjacenciaBusca[i][visita] = new Aresta("NULL",-1);
-                
+                int id = linhaVazia();
+                if(id>=0){
+                    nVertices--;
+                    Aresta[][] tmp2 = adjacenciaBusca;
+                    adjacenciaBusca = new Aresta[nVertices][nVertices];
+                    for (int w=0; w<id;w++) // primeiro quadrante
+                        for (int j=0; j<id; j++)
+                            adjacenciaBusca[w][j] = tmp2[w][j];
+                    for (int w=id+1; w<nVertices+1;w++) // segundo quadrante
+                        for (int j=0; j<id; j++)
+                            adjacenciaBusca[w-1][j] = tmp2[w][j];
+                    for (int w=0; w<id;w++) // terceiro quadrante
+                        for (int j=id+1; j<nVertices+1; j++)
+                            adjacenciaBusca[w][j-1] = tmp2[w][j];
+                    for (int w=id+1; w<nVertices+1;w++) // quarto quadrante
+                        for (int j=id+1; j<nVertices+1; j++)
+                            adjacenciaBusca[w-1][j-1] = tmp2[w][j];
+                }
                 if(isConexo()){
                     System.out.println("entrou");
                     vetorCicloEuleriano[iVetor][0] = visita;
@@ -169,7 +198,7 @@ public class Busca {
 
                     iVetor++;
                     /*visitados[visita] = true;*/
-
+                    
                     cicloEuleriano(i);
                 
                 }else{
