@@ -343,19 +343,47 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
         }
         JOptionPane.showMessageDialog(null, caminhosDijkstra, "Algoritmo Dijkstra", JOptionPane.INFORMATION_MESSAGE);
     }
+    private int contarArestas(){
+        int cont = 0;
     
+        for(int i = 0; i<nVertices; i++){
+            for(int j = i; j<nVertices; j++){
+                if(adjacencia[i][j].getCusto()!=-1)
+                    cont++;
+            }
+        }
+        return cont;
+    }
     protected void cicloEuleriano(Aresta[][] adjacenciaEuleriano){
-        int listaArestas[][] = new int[nVertices][nVertices];
-        int iVisitas = 0;
-        for(int i = 0; i<nVertices; i++)
-            for(int j = 0; j<nVertices; j++)
-                listaArestas[i][j] = -1;                
-        int noInformado = 0;
-        Busca cicloEuleriano = new Busca(nVertices,adjacenciaEuleriano,noInformado);
-        listaArestas = cicloEuleriano.cicloEuleriano(0);
-        for(int i = 0; i<nVertices; i++)
-            System.out.println(listaArestas[i][0]+" "+listaArestas[i][1]);
+        int noInformado;
+        String xString = JOptionPane.showInputDialog(painelGrafo,
+                "Informe o nó de início", null);
+        try {
+            noInformado = Integer.parseInt(xString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
         
+        int qtdArestas = contarArestas();
+        int listaArestas[][] = new int[qtdArestas][2];
+        int iVisitas = 0;
+        for(int i = 0; i<qtdArestas; i++){
+            listaArestas[i][0] = -1;     
+            listaArestas[i][1] = -1;     
+        }        
+        
+        Busca cicloEuleriano = new Busca(nVertices,adjacenciaEuleriano,qtdArestas);
+        listaArestas = cicloEuleriano.cicloEuleriano(noInformado);
+        
+        String cicloEulerianoString = "";
+        for(int i = 0; i<qtdArestas; i++)
+            cicloEulerianoString += listaArestas[i][0]+"->";
+        
+        cicloEulerianoString += listaArestas[qtdArestas-1][1];
+        
+        JOptionPane.showMessageDialog(null, cicloEulerianoString, "Ciclo Euleriano", JOptionPane.INFORMATION_MESSAGE);
         
     }
     

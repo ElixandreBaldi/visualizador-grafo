@@ -13,12 +13,12 @@ import java.util.LinkedList;
  * @author Luiz Guilherme F. Rosa
  */
 
-public class Busca {
-    int noInicial;
+public class Busca {    
     int[] vetorBusca;
     int[][] vetorCicloEuleriano;
     int iVetor;
     int nVertices;
+    int qtdArestas;
     Aresta[][] adjacenciaBusca;
     boolean[] visitados;
     
@@ -37,12 +37,12 @@ public class Busca {
         }
     }
 
-    Busca(int n, Aresta[][] adja, int inicio){
-        noInicial = inicio;
-        vetorCicloEuleriano = new int[n][n];
+    Busca(int n, Aresta[][] adja, int qArestas){        
+        vetorCicloEuleriano = new int[qArestas][2];
         visitados = new boolean[n];
         iVetor = 0;
         nVertices = n;   
+        qtdArestas = qArestas;
         adjacenciaBusca = new Aresta[nVertices][nVertices];
         for(int i = 0; i<nVertices; i++){
             visitados[i] = false;            
@@ -50,10 +50,6 @@ public class Busca {
                 adjacenciaBusca[i][j] = new Aresta(adja[i][j].getRotulo(), adja[i][j].getCusto());
             }
         }
-    }
-
-    void setNoInicial(int no){
-        noInicial = no;
     }
 
     Aresta[][] getAdjacencia(){
@@ -125,9 +121,12 @@ public class Busca {
         return false;
     }
     
-    boolean isConexo(){
+    boolean isConexo(int linhaVisita){        
         Aresta[][] adjacenciaGoodman = new Aresta[nVertices][nVertices];
+        int qtdLinhasVazias = 0;
         for(int i = 0; i<nVertices; i++){
+            if(linhaVazia(i) && i!=linhaVisita)
+                qtdLinhasVazias++;            
             for(int j = 0; j<nVertices; j++){
                 adjacenciaGoodman[i][j] = new Aresta(adjacenciaBusca[i][j].getRotulo(), adjacenciaBusca[i][j].getCusto());
             }        
@@ -171,83 +170,47 @@ public class Busca {
             if(!visitados[i])
                 nComponentesConexo++;
         }        
-        if(nComponentesConexo == 1){
-            System.out.println("aqui:"+nComponentesConexo);
+        nComponentesConexo -=qtdLinhasVazias;
+        
+        if(nComponentesConexo == 1 || nComponentesConexo == 0)            
             return true;
-        }
+        
         return false;
     }
 
-    int linhaVazia(){
+    boolean linhaVazia(int linha){
         int cont = 0;
-        for(int i = 0; i<nVertices; i++){
-            for(int j = 0; j<nVertices; j++){
-                if(adjacenciaBusca[i][j].getCusto()==-1)
-                    cont++;
-            }
-            if(cont == nVertices)    
-                return i;
-            cont = 0;
+        for(int j = 0; j<nVertices; j++){
+            if(adjacenciaBusca[linha][j].getCusto()==-1)
+                cont++;
         }
-        return -1;
+        if(cont == nVertices)    
+            return true;
+        cont = 0;
+        
+        return false;
     }
 
     int[][] cicloEuleriano(int no){
         int visita = no;
         for(int i = 0; i<nVertices; i++){
-            Aresta tmp;
-            if(adjacenciaBusca[visita][i].getCusto() != -1 && i != visita /*&& !visitados[i]*/){                                                        
+            Aresta tmp;            
+            if(adjacenciaBusca[visita][i].getCusto() != -1 && i != visita){ 
                 tmp = new Aresta(adjacenciaBusca[visita][i].getRotulo(),adjacenciaBusca[visita][i].getCusto());
                 adjacenciaBusca[visita][i] = new Aresta("NULL",-1);
-                adjacenciaBusca[i][visita] = new Aresta("NULL",-1);
-                int id = linhaVazia();
-                if(id>=0){
-                    nVertices--;
-                    Aresta[][] tmp2 = adjacenciaBusca;
-                    adjacenciaBusca = new Aresta[nVertices][nVertices];
-                    for (int w=0; w<id;w++) // primeiro quadrante
-                        for (int j=0; j<id; j++)
-                            adjacenciaBusca[w][j] = tmp2[w][j];
-                    for (int w=id+1; w<nVertices+1;w++) // segundo quadrante
-                        for (int j=0; j<id; j++)
-                            adjacenciaBusca[w-1][j] = tmp2[w][j];
-                    for (int w=0; w<id;w++) // terceiro quadrante
-                        for (int j=id+1; j<nVertices+1; j++)
-                            adjacenciaBusca[w][j-1] = tmp2[w][j];
-                    for (int w=id+1; w<nVertices+1;w++) // quarto quadrante
-                        for (int j=id+1; j<nVertices+1; j++)
-                            adjacenciaBusca[w-1][j-1] = tmp2[w][j];
-                }
-                if(isConexo()){
-                    System.out.println("entrou");
+                adjacenciaBusca[i][visita] = new Aresta("NULL",-1);                                
+                if(isConexo(i)){                    
                     vetorCicloEuleriano[iVetor][0] = visita;
                     vetorCicloEuleriano[iVetor][1] = i;
-                    iVetor++;
-                    /*visitados[visita] = true;*/
+                    iVetor++;                    
                     cicloEuleriano(i);
-                }else{
+                }else{                    
                     adjacenciaBusca[visita][i] = new Aresta(tmp.getRotulo(),tmp.getCusto());
                     adjacenciaBusca[i][visita] = new Aresta(tmp.getRotulo(),tmp.getCusto());
                 }
-            }            
+            }                        
         }
-        for(int i =0; i<nVertices; i++)
-            System.out.println(vetorCicloEuleriano[i][0]+" "+vetorCicloEuleriano[i][1]);
-        System.out.println("");
+        
         return vetorCicloEuleriano;
-    }
-
-    void printAA(Aresta[][] adjacenciaGoodman, int nVerticesGoodman){
-        for(int w = 0; w < nVerticesGoodman; w++){
-            for(int y = 0; y < nVerticesGoodman; y++){
-                if(adjacenciaGoodman[w][y].getCusto() != -1){
-                    System.out.printf("1 ");
-                }
-                else
-                    System.out.printf("0 ");
-            }
-            System.out.println("");
-        }
-        System.out.println("");
     }
 }
