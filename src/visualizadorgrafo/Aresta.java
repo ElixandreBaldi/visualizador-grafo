@@ -8,10 +8,12 @@ public class Aresta {
         rotulo = R;
         custo = C;
     }
+    
     Aresta(String R, double C){
         rotulo = R;
         custo = C;
     }
+    
     public String getRotulo() {
         return rotulo;
     }
@@ -26,7 +28,8 @@ public class Aresta {
 
     public void setCusto(int custo) {
         this.custo = custo;
-    }    
+    }  
+    
     public void print(){
         System.out.printf(" |%s %d ",rotulo,custo);
     }

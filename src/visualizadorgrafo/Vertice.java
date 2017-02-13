@@ -15,6 +15,7 @@ public class Vertice {
     int getCoordX(){
         return coordX;
     }
+    
     void setCoordX(int dado){
         coordX = dado;
     }
@@ -22,6 +23,7 @@ public class Vertice {
     int getCoordY(){
         return coordY;
     }
+    
     void setCoordY(int dado){
         coordY = dado;
     }
@@ -29,9 +31,11 @@ public class Vertice {
     String getRotulo(){
         return rotulo;
     }
+    
     void setId(String dado){
         rotulo = dado;
     }
+    
     void print(){
         System.out.println(rotulo+" "+coordX+" "+coordY);
     }
