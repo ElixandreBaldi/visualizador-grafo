@@ -1,5 +1,10 @@
 package visualizadorgrafo;
 
+/**
+ * @author Elixandre M. Baldi <https://github.com/ElixandreBaldi>
+ * @author Luiz Guilherme F. Rosa <https://github.com/luizguilhermefr>
+ */
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -16,6 +21,21 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
+import static java.lang.Character.getNumericValue;
 
 public class VisualizadorGrafo extends javax.swing.JFrame {
 
@@ -24,82 +44,323 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
      */
     public VisualizadorGrafo() {
         initComponents();
-        painelGrafo.addMouseListener(new MouseListener() {
-            // À cada clique, a saída é o X/Y daquela posição
+        graphPanel.addMouseListener(new MouseListener() {
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX();
                 int y = e.getY();
                 System.out.println(x + "," + y);
-                if (painelGrafo.isEnabled()) insertVertice(x, y);
+                if (graphPanel.isEnabled()) {
+                    insertVertex(x, y);
+                }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
+                //
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                //
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
+                //
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
+                //
             }
         });
     }
-
+    /**
+     * Paint stuff on the screen.
+     * @param g The graphic where to paint.
+     */
     @Override
     public void paint(Graphics g) {
-        //função de sistema que desenha elementos na tela, fizemos um Override para desenhar as arestas que precisamos
         super.paint(g);
         if (redraw) {
-            g = painelGrafo.getGraphics();
-            for (int i = 0; i < nVertices; i++) { //desenha arestas
-                for (int j = i; j < nVertices; j++) {
-                    if (adjacencia[i][j].getCusto() != -1) {
+            g = graphPanel.getGraphics();
+            for (int i = 0; i < nVertex; i++) { // draw edges
+                for (int j = i; j < nVertex; j++) {
+                    if (adjacency[i][j].getCost() != -1) {
                         int x1, x2, y1, y2;
-                        x1 = vertices[i].getCoordX();
-                        y1 = vertices[i].getCoordY();
-                        x2 = vertices[j].getCoordX();
-                        y2 = vertices[j].getCoordY();
+                        x1 = vertex[i].getCoordX();
+                        y1 = vertex[i].getCoordY();
+                        x2 = vertex[j].getCoordX();
+                        y2 = vertex[j].getCoordY();
                         g.drawLine(x1, y1, x2, y2);
                     }
                 }
-            }  
+            }
             redraw = false;
         }
         goodman(false);
     }
 
-    protected void redrawVertices() {
-        //desenha o vértice na tela:
-        for (int i = 0; i < nVertices; i++) {
-            javax.swing.JLabel novoLabel = new javax.swing.JLabel(vertices[i].getRotulo(), javax.swing.JLabel.CENTER);
-            novoLabel.setBounds(vertices[i].getCoordX(), vertices[i].getCoordY(), novoLabel.getPreferredSize().width, novoLabel.getPreferredSize().height);
-            novoLabel.setForeground(Color.blue);
-            novoLabel.setToolTipText("<html>" + "<strong>id:</strong> " + i + "<br><strong>Rótulo:</strong> " + vertices[i].getRotulo() + "<br><strong>X:</strong> " + vertices[i].getCoordX() + "<br><strong>Y:</strong> " + vertices[i].getCoordY() + "</html>");
-            painelGrafo.add(novoLabel);
-        }        
-        SwingUtilities.updateComponentTreeUI(this);               
-        redraw = true;
-        repaint();    
-    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        selectOpenFile = new javax.swing.JFileChooser();
+        selectSaveFile = new javax.swing.JFileChooser();
+        lblEulerian = new javax.swing.JLabel();
+        lblConnectedComponents = new javax.swing.JLabel();
+        graphPanel = new javax.swing.JPanel();
+        mainMenu = new javax.swing.JMenuBar();
+        itemFile = new javax.swing.JMenu();
+        subItemFileNew = new javax.swing.JMenuItem();
+        subItemFileOpen = new javax.swing.JMenuItem();
+        subItemFileSave = new javax.swing.JMenuItem();
+        subItemFileExit = new javax.swing.JMenuItem();
+        itemEdit = new javax.swing.JMenu();
+        subItemEditInsertVertex = new javax.swing.JMenuItem();
+        subItemEditInsertEdge = new javax.swing.JMenuItem();
+        subItemEditRemoveVertex = new javax.swing.JMenuItem();
+        subItemEditRemoveEdge = new javax.swing.JMenuItem();
+        itemSearch = new javax.swing.JMenu();
+        subItemSearchBreadthFirst = new javax.swing.JMenuItem();
+        subItemSearchDepthFirst = new javax.swing.JMenuItem();
+        itemAlgorithms = new javax.swing.JMenu();
+        subItemAlgorithmsFleury = new javax.swing.JMenuItem();
+        subItemAlgorithmsDijkstra = new javax.swing.JMenuItem();
+        subItemAlgorithmsGoodman = new javax.swing.JMenuItem();
+
+        selectOpenFile.setDialogTitle("Abrir");
+
+        selectSaveFile.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
+        selectSaveFile.setApproveButtonText("Salvar");
+        selectSaveFile.setApproveButtonToolTipText("Salvar");
+        selectSaveFile.setDialogTitle("Salvar");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Visualizador Grafo");
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setName("mainFrame"); // NOI18N
+
+        lblEulerian.setText("Not eulerian");
+        lblEulerian.setEnabled(false);
+        lblEulerian.setFocusable(false);
+
+        lblConnectedComponents.setText("Connected elements: 0");
+        lblConnectedComponents.setEnabled(false);
+        lblConnectedComponents.setFocusable(false);
+
+        graphPanel.setBackground(new java.awt.Color(254, 254, 254));
+        graphPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
+        graphPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        graphPanel.setEnabled(false);
+
+        javax.swing.GroupLayout graphPanelLayout = new javax.swing.GroupLayout(graphPanel);
+        graphPanel.setLayout(graphPanelLayout);
+        graphPanelLayout.setHorizontalGroup(
+            graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        graphPanelLayout.setVerticalGroup(
+            graphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 532, Short.MAX_VALUE)
+        );
+
+        itemFile.setText("File");
+
+        subItemFileNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        subItemFileNew.setText("New");
+        subItemFileNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemFileNewActionPerformed(evt);
+            }
+        });
+        itemFile.add(subItemFileNew);
+
+        subItemFileOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        subItemFileOpen.setText("Open");
+        subItemFileOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemFileOpenActionPerformed(evt);
+            }
+        });
+        itemFile.add(subItemFileOpen);
+
+        subItemFileSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        subItemFileSave.setText("Save");
+        subItemFileSave.setEnabled(false);
+        subItemFileSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemFileSaveActionPerformed(evt);
+            }
+        });
+        itemFile.add(subItemFileSave);
+
+        subItemFileExit.setText("Exit");
+        subItemFileExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemFileExitActionPerformed(evt);
+            }
+        });
+        itemFile.add(subItemFileExit);
+
+        mainMenu.add(itemFile);
+
+        itemEdit.setText("Edit");
+        itemEdit.setEnabled(false);
+
+        subItemEditInsertVertex.setText("Insert vertex");
+        subItemEditInsertVertex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditInsertVertexActionPerformed(evt);
+            }
+        });
+        itemEdit.add(subItemEditInsertVertex);
+
+        subItemEditInsertEdge.setText("Insert edge");
+        subItemEditInsertEdge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditInsertEdgeActionPerformed(evt);
+            }
+        });
+        itemEdit.add(subItemEditInsertEdge);
+
+        subItemEditRemoveVertex.setText("Remove vertex");
+        subItemEditRemoveVertex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditRemoveVertexActionPerformed(evt);
+            }
+        });
+        itemEdit.add(subItemEditRemoveVertex);
+
+        subItemEditRemoveEdge.setText("Remove edge");
+        subItemEditRemoveEdge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemEditRemoveEdgeActionPerformed(evt);
+            }
+        });
+        itemEdit.add(subItemEditRemoveEdge);
+
+        mainMenu.add(itemEdit);
+
+        itemSearch.setText("Search");
+        itemSearch.setEnabled(false);
+
+        subItemSearchBreadthFirst.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        subItemSearchBreadthFirst.setText("Breadth First (BFS)");
+        subItemSearchBreadthFirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemSearchBreadthFirstActionPerformed(evt);
+            }
+        });
+        itemSearch.add(subItemSearchBreadthFirst);
+
+        subItemSearchDepthFirst.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        subItemSearchDepthFirst.setText("Depth First (DFS)");
+        subItemSearchDepthFirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemSearchDepthFirstActionPerformed(evt);
+            }
+        });
+        itemSearch.add(subItemSearchDepthFirst);
+
+        mainMenu.add(itemSearch);
+
+        itemAlgorithms.setText("Algorithms");
+        itemAlgorithms.setEnabled(false);
+
+        subItemAlgorithmsFleury.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        subItemAlgorithmsFleury.setText("Eulerian Path (Fleury)");
+        subItemAlgorithmsFleury.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemAlgorithmsFleuryActionPerformed(evt);
+            }
+        });
+        itemAlgorithms.add(subItemAlgorithmsFleury);
+
+        subItemAlgorithmsDijkstra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
+        subItemAlgorithmsDijkstra.setText("Minimum Cost (Dijkstra)");
+        subItemAlgorithmsDijkstra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemAlgorithmsDijkstraActionPerformed(evt);
+            }
+        });
+        itemAlgorithms.add(subItemAlgorithmsDijkstra);
+
+        subItemAlgorithmsGoodman.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        subItemAlgorithmsGoodman.setText("Goodman");
+        subItemAlgorithmsGoodman.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subItemAlgorithmsGoodmanActionPerformed(evt);
+            }
+        });
+        itemAlgorithms.add(subItemAlgorithmsGoodman);
+
+        mainMenu.add(itemAlgorithms);
+
+        setJMenuBar(mainMenu);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(graphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblEulerian)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblConnectedComponents)
+                        .addGap(0, 510, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(graphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEulerian)
+                    .addComponent(lblConnectedComponents))
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
     
-    protected void drawRotulosArestas() {
+    protected void redrawVertices() {
+        for (int i = 0; i < nVertex; i++) {
+            javax.swing.JLabel newLabel = new javax.swing.JLabel(vertex[i].getLabel(), javax.swing.JLabel.CENTER);
+            newLabel.setBounds(vertex[i].getCoordX(), vertex[i].getCoordY(), newLabel.getPreferredSize().width, newLabel.getPreferredSize().height);
+            newLabel.setForeground(Color.blue);
+            newLabel.setToolTipText("<html>" + "<strong>id:</strong> " + i + "<br><strong>Rótulo:</strong> " + vertex[i].getLabel() + "<br><strong>X:</strong> " + vertex[i].getCoordX() + "<br><strong>Y:</strong> " + vertex[i].getCoordY() + "</html>");
+            graphPanel.add(newLabel);
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+        redraw = true;
+        repaint();
+    }
+
+    protected void drawEdgesLabels() {
         //limpa o painel do grafo e reinsere todos os elementos, em seguida chama repaint() para reinserir arestas
-        painelGrafo.removeAll();
-        for (int i = 0; i < nVertices; i++) { //desenha arestas
-            for (int j = i; j < nVertices; j++) {
-                if (adjacencia[i][j].getCusto() != -1) {
-                    javax.swing.JLabel lblRotulo = new javax.swing.JLabel(adjacencia[i][j].getRotulo(), javax.swing.JLabel.CENTER);
-                    lblRotulo.setBounds((vertices[i].getCoordX()+vertices[j].getCoordX())/2, (vertices[i].getCoordY()+vertices[j].getCoordY())/2, lblRotulo.getPreferredSize().width, lblRotulo.getPreferredSize().height);
+        graphPanel.removeAll();
+        for (int i = 0; i < nVertex; i++) { //desenha arestas
+            for (int j = i; j < nVertex; j++) {
+                if (adjacency[i][j].getCost() != -1) {
+                    javax.swing.JLabel lblRotulo = new javax.swing.JLabel(adjacency[i][j].getLabel(), javax.swing.JLabel.CENTER);
+                    lblRotulo.setBounds((vertex[i].getCoordX() + vertex[j].getCoordX()) / 2, (vertex[i].getCoordY() + vertex[j].getCoordY()) / 2, lblRotulo.getPreferredSize().width, lblRotulo.getPreferredSize().height);
                     Font novaFonte = new Font(lblRotulo.getFont().getName(), lblRotulo.getFont().getStyle(), 10);
                     lblRotulo.setFont(novaFonte);
-                    painelGrafo.add(lblRotulo);
+                    graphPanel.add(lblRotulo);
                 }
             }
         }
@@ -109,321 +370,346 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
     protected void reset() {
         // reinicia tudo para criar/abrir novos arquivos
         fileLocation = "";
-        vertices = new Vertice[0];
-        adjacencia = new Aresta[0][0];
-        nVertices = 0;
+        vertex = new Vertex[0];
+        adjacency = new Edge[0][0];
+        nVertex = 0;
         this.setTitle("Visualizador Grafo");
-        painelGrafo.removeAll();
-        painelGrafo.setEnabled(true);
-        itemEditar.setEnabled(true);
-        itemBusca.setEnabled(true);
-        subItemArquivoSalvar.setEnabled(true);        
-        redraw = true;                
-        repaint();        
+        graphPanel.removeAll();
+        graphPanel.setEnabled(true);
+        itemEdit.setEnabled(true);
+        itemAlgorithms.setEnabled(true);
+        subItemFileSave.setEnabled(true);
+        redraw = true;
+        repaint();
     }
 
-    protected void analisaLinha(String text, boolean isAresta) throws Exception {
+    protected void analyzeLine(String text, boolean isAresta) throws Exception {
         if (!isAresta) { //vertice
-            int i = 0, coordX=0, coordY=0;
+            int i = 0, coordX = 0, coordY = 0;
             String rotulo = "";
-            if (text.charAt(i) == '\''){ //inicio do rotulo
+            if (text.charAt(i) == '\'') { //inicio do rotulo
                 i++;
-                while(text.charAt(i) != '\''){
+                while (text.charAt(i) != '\'') {
                     rotulo += text.charAt(i);
                     i++;
                 }
                 i++; //fim do rotulo
             }
-            if (text.charAt(i) == ' ') i++; //espaço entre rotulo e x
-            while (text.charAt(i)!=' '){
-                coordX = (coordX*10) + getNumericValue(text.charAt(i));
+            if (text.charAt(i) == ' ') {
+                i++; //espaço entre rotulo e x
+            }
+            while (text.charAt(i) != ' ') {
+                coordX = (coordX * 10) + getNumericValue(text.charAt(i));
                 i++;
             }
             i++; //espaço entre x e y
-            while (text.charAt(i)!=';'){
-                coordY = (coordY*10) + getNumericValue(text.charAt(i));
+            while (text.charAt(i) != ';') {
+                coordY = (coordY * 10) + getNumericValue(text.charAt(i));
                 i++;
             }
-            Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
-            nVertices++; // incrementa o número de vértices
-            vertices = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
-            System.arraycopy(tmp, 0, vertices, 0, tmp.length); // copia o array temporário para o novo
-            Vertice novoVertice = new Vertice(coordX, coordY, rotulo); // cria um novo vértice
-            vertices[nVertices - 1] = novoVertice; // insere o novo vértice na listagem
+            Vertex[] tmp = vertex; // copia o array vértice atual para um temporário
+            nVertex++; // incrementa o número de vértices
+            vertex = new Vertex[nVertex]; // recria o array de vértices vazio, com o novo tamanho
+            System.arraycopy(tmp, 0, vertex, 0, tmp.length); // copia o array temporário para o novo
+            Vertex novoVertice = new Vertex(coordX, coordY, rotulo); // cria um novo vértice
+            vertex[nVertex - 1] = novoVertice; // insere o novo vértice na listagem
         } else {//aresta
             int i = 0, origem = 0, destino = 0, custo = 0;
             String rotulo = "";
-            while (text.charAt(i) != ' '){
-                origem = (origem*10) + getNumericValue(text.charAt(i));
+            while (text.charAt(i) != ' ') {
+                origem = (origem * 10) + getNumericValue(text.charAt(i));
                 i++;
             }
             i++;
-            while (text.charAt(i) != ' '){
-                destino = (destino*10) + getNumericValue(text.charAt(i));
+            while (text.charAt(i) != ' ') {
+                destino = (destino * 10) + getNumericValue(text.charAt(i));
                 i++;
             }
             i++;
-            while (text.charAt(i) != ' '){
-                custo = (custo*10) + getNumericValue(text.charAt(i));
+            while (text.charAt(i) != ' ') {
+                custo = (custo * 10) + getNumericValue(text.charAt(i));
                 i++;
             }
             i++;
-            if (text.charAt(i)=='\''){
+            if (text.charAt(i) == '\'') {
                 i++;
-                while (text.charAt(i) != '\''){
+                while (text.charAt(i) != '\'') {
                     rotulo += text.charAt(i);
                     i++;
                 }
             }
-            Aresta a = new Aresta(rotulo, custo);
-            adjacencia[origem-1][destino-1] = a;
-            adjacencia[destino-1][origem-1] = a;
+            Edge a = new Edge(rotulo, custo);
+            adjacency[origem - 1][destino - 1] = a;
+            adjacency[destino - 1][origem - 1] = a;
         }
     }
-    
-    protected boolean isEuleriano(){
+
+    protected boolean isEulerian() {
         int cont;
-        if(qtdComponentesConexo == 1){
-            for(int i = 0; i < nVertices; i++){
+        if (connectedComponents == 1) {
+            for (int i = 0; i < nVertex; i++) {
                 cont = 0;
-                for(int j = 0; j < nVertices; j++){
-                    if(adjacencia[i][j].getCusto() != -1)
+                for (int j = 0; j < nVertex; j++) {
+                    if (adjacency[i][j].getCost() != -1) {
                         cont++;
+                    }
                 }
-                if(cont % 2 != 0)
+                if (cont % 2 != 0) {
                     return false;
+                }
             }
-        }
-        else
+        } else {
             return false;
-        
+        }
+
         return true;
     }
 
-    protected boolean isGrafo(Aresta[][] grafo, int n){
-        for(int i = 0; i<n; i++)
-            for(int j = 0; j<n; j++)
-                if(grafo[i][j].getCusto() != -1)
+    protected boolean isGraph(Edge[][] grafo, int n) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grafo[i][j].getCost() != -1) {
                     return true;
+                }
+            }
+        }
         return false;
     }
-    
-    protected void goodman(boolean withAlert){
-        Aresta[][] adjacenciaGoodman = new Aresta[nVertices][nVertices];
-        
-        for(int i = 0; i<nVertices; i++){
-            for(int j = 0; j<nVertices; j++){
-                adjacenciaGoodman[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
-            }        
+
+    protected void goodman(boolean withAlert) {
+        Edge[][] adjacenciaGoodman = new Edge[nVertex][nVertex];
+
+        for (int i = 0; i < nVertex; i++) {
+            for (int j = 0; j < nVertex; j++) {
+                adjacenciaGoodman[i][j] = new Edge(adjacency[i][j].getLabel(), adjacency[i][j].getCost());
+            }
         }
-        
+
         int nComponentesConexo = 0, visita = 0, primeiro = 0;
-        boolean[] visitados = new boolean[nVertices];
+        boolean[] visitados = new boolean[nVertex];
         boolean flag = false;
-        
-        while(isGrafo(adjacenciaGoodman, nVertices)){            
-            Busca B = new Busca(nVertices, adjacenciaGoodman);
-            for(int i = 0; i < nVertices; i++){//escolhe qualquer um que não foi visitado                
-                if(!visitados[i]){
+
+        while (isGraph(adjacenciaGoodman, nVertex)) {
+            Search B = new Search(nVertex, adjacenciaGoodman);
+            for (int i = 0; i < nVertex; i++) {//escolhe qualquer um que não foi visitado                
+                if (!visitados[i]) {
                     visita = i;
-                    i = nVertices;
+                    i = nVertex;
                 }
-                int conexos[] = B.profundidade(visita);                
+                int conexos[] = B.profundidade(visita);
                 primeiro = conexos[0];
                 flag = true;
-                for(int j = 0; j < nVertices; j++){
-                    if(conexos[j] != -1)
+                for (int j = 0; j < nVertex; j++) {
+                    if (conexos[j] != -1) {
                         visitados[conexos[j]] = true;
+                    }
                 }
-                for(int j = 1; j < nVertices; j++){
-                    if(conexos[j] != -1){
-                        for(int w = 0; w < nVertices; w++){
-                            if(adjacenciaGoodman[primeiro][w].getCusto() < adjacenciaGoodman[conexos[j]][w].getCusto()){
-                                adjacenciaGoodman[primeiro][w] = new Aresta(adjacenciaGoodman[conexos[j]][w].getRotulo(),adjacenciaGoodman[conexos[j]][w].getCusto());
+                for (int j = 1; j < nVertex; j++) {
+                    if (conexos[j] != -1) {
+                        for (int w = 0; w < nVertex; w++) {
+                            if (adjacenciaGoodman[primeiro][w].getCost() < adjacenciaGoodman[conexos[j]][w].getCost()) {
+                                adjacenciaGoodman[primeiro][w] = new Edge(adjacenciaGoodman[conexos[j]][w].getLabel(), adjacenciaGoodman[conexos[j]][w].getCost());
                             }
-                            adjacenciaGoodman[conexos[j]][w] = new Aresta("NULL", -1);
+                            adjacenciaGoodman[conexos[j]][w] = new Edge("NULL", -1);
                         }
                     }
                 }
             }
             nComponentesConexo++;
-            if(flag){
-                for(int i = 0; i<nVertices; i++)
-                    adjacenciaGoodman[primeiro][i] = new Aresta("NULL", -1);
-            }            
+            if (flag) {
+                for (int i = 0; i < nVertex; i++) {
+                    adjacenciaGoodman[primeiro][i] = new Edge("NULL", -1);
+                }
+            }
             flag = false;
         }
-        for(int i = 0; i< nVertices; i++){
-            if(!visitados[i])
+        for (int i = 0; i < nVertex; i++) {
+            if (!visitados[i]) {
                 nComponentesConexo++;
+            }
         }
-        qtdComponentesConexo = nComponentesConexo;
-        lblConexos.setText("Componentes Conexos: " + nComponentesConexo);
-        if (isEuleriano())
-            lblEuleriano.setText("Euleriano");
-        else
-            lblEuleriano.setText("Não euleriano");
-        if (withAlert)
+        connectedComponents = nComponentesConexo;
+        lblConnectedComponents.setText("Componentes Conexos: " + nComponentesConexo);
+        if (isEulerian()) {
+            lblEulerian.setText("Euleriano");
+        } else {
+            lblEulerian.setText("Não euleriano");
+        }
+        if (withAlert) {
             JOptionPane.showMessageDialog(null, "Componentes Conexos: " + nComponentesConexo, "Algoritmo de Goodman", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
-    
-    protected String converteDadosParaArquivo(){
+
+    protected String converteDadosParaArquivo() {
         String output = "";
-        for (int i = 0; i < nVertices; i++){
-            output += "'" + vertices[i].getRotulo() + "' " + vertices[i].getCoordX() + " " + vertices[i].getCoordY() + ";\n";
+        for (int i = 0; i < nVertex; i++) {
+            output += "'" + vertex[i].getLabel() + "' " + vertex[i].getCoordX() + " " + vertex[i].getCoordY() + ";\n";
         }
         output += "\n";
-        for (int i = 0; i < nVertices; i++) {
-            for (int j = i; j < nVertices; j++) {
-                if (adjacencia[i][j].getCusto() != -1) {
-                    output += (i+1) + " " + (j+1) + " " + adjacencia[i][j].getCusto() + " '" + adjacencia[i][j].getRotulo() + "'\n";
+        for (int i = 0; i < nVertex; i++) {
+            for (int j = i; j < nVertex; j++) {
+                if (adjacency[i][j].getCost() != -1) {
+                    output += (i + 1) + " " + (j + 1) + " " + adjacency[i][j].getCost() + " '" + adjacency[i][j].getLabel() + "'\n";
                 }
             }
         }
         return output;
     }
-    
-    protected void dijkstra(int origem){
-        Aresta[][] adjacenciaDijkstra = new Aresta[nVertices][nVertices];
-        double dist[] = new double[nVertices]; // distancias entre a origem e cada indice deste vetor
-        boolean fixo[] = new boolean[nVertices]; //informa se o indice deste vetor já foi visitado
+
+    protected void dijkstra(int origem) {
+        Edge[][] adjacenciaDijkstra = new Edge[nVertex][nVertex];
+        double dist[] = new double[nVertex]; // distancias entre a origem e cada indice deste vetor
+        boolean fixo[] = new boolean[nVertex]; //informa se o indice deste vetor já foi visitado
         int faltam; //para movimentar o for
-        String[] caminhos = new String[nVertices]; // concatena-se o caminhos mais curto entre o indice do vetor e a variavel origem     
-        for(int i= 0; i<nVertices; i++){ //setar a tabela de adjacencia utilizada aqui
-            for(int j=0; j<nVertices; j++){
-                if(i == j){
-                    adjacenciaDijkstra[i][j] = new Aresta("NULL", 0);  
+        String[] caminhos = new String[nVertex]; // concatena-se o caminhos mais curto entre o indice do vetor e a variavel origem     
+        for (int i = 0; i < nVertex; i++) { //setar a tabela de adjacencia utilizada aqui
+            for (int j = 0; j < nVertex; j++) {
+                if (i == j) {
+                    adjacenciaDijkstra[i][j] = new Edge("NULL", 0);
                     continue;
                 }
-                if(adjacencia[i][j].getCusto() != -1)                    
-                    adjacenciaDijkstra[i][j] = new Aresta(adjacencia[i][j].getRotulo(), adjacencia[i][j].getCusto());
-                else                                         
-                    adjacenciaDijkstra[i][j] = new Aresta("NULL", maximo);                  
+                if (adjacency[i][j].getCost() != -1) {
+                    adjacenciaDijkstra[i][j] = new Edge(adjacency[i][j].getLabel(), adjacency[i][j].getCost());
+                } else {
+                    adjacenciaDijkstra[i][j] = new Edge("NULL", bigM);
+                }
             }
-        }        
-        for(int i=0; i < nVertices; i++){//setar os valores
-            fixo[i]=false; 
-            dist[i]=maximo; 
+        }
+        for (int i = 0; i < nVertex; i++) {//setar os valores
+            fixo[i] = false;
+            dist[i] = bigM;
             caminhos[i] = "";
         }
         dist[origem] = 0;
-        
-        for(faltam = nVertices; faltam > 0; faltam--){            
+
+        for (faltam = nVertex; faltam > 0; faltam--) {
             int no = -1;
-            for(int i = 0; i < nVertices; i++)
-                if(!fixo[i] && (no==-1 || dist[i] < dist[no]))
-                    no = i;                     
-                
-            fixo[no] = true;
-            
-            if(dist[no] >= maximo)
-                break;
-            
-            for(int i=0; i<nVertices; i++){
-                if(dist[i] > dist[no]+adjacenciaDijkstra[no][i].getCusto()){
-                    dist[i] = dist[no]+adjacenciaDijkstra[no][i].getCusto();
-                    String vazio = "";
-                    if(caminhos[no].equals(vazio))
-                        caminhos[i] += vertices[no].getRotulo()+"->";
-                    else
-                        caminhos[i] += caminhos[no]+vertices[no].getRotulo()+"->";
+            for (int i = 0; i < nVertex; i++) {
+                if (!fixo[i] && (no == -1 || dist[i] < dist[no])) {
+                    no = i;
                 }
-            }            
+            }
+
+            fixo[no] = true;
+
+            if (dist[no] >= bigM) {
+                break;
+            }
+
+            for (int i = 0; i < nVertex; i++) {
+                if (dist[i] > dist[no] + adjacenciaDijkstra[no][i].getCost()) {
+                    dist[i] = dist[no] + adjacenciaDijkstra[no][i].getCost();
+                    String vazio = "";
+                    if (caminhos[no].equals(vazio)) {
+                        caminhos[i] += vertex[no].getLabel() + "->";
+                    } else {
+                        caminhos[i] += caminhos[no] + vertex[no].getLabel() + "->";
+                    }
+                }
+            }
         }
-        String caminhosDijkstra = "Origem: "+vertices[origem].getRotulo()+"\n\n\n";
-        for(int i=0; i<nVertices; i++){
-            caminhos[i] += vertices[i].getRotulo();
-            if(i!=origem){
-                if(dist[i] >= Double.POSITIVE_INFINITY)
-                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = Nao existe\n";            
-                else
-                    caminhosDijkstra+="Distancia entre "+vertices[origem].getRotulo()+" e "+vertices[i].getRotulo()+" = "+dist[i]+"\nCaminho com menor custo: "+caminhos[i]+"\n";            
-                if(i<nVertices-1)
-                    caminhosDijkstra+="\n";
-            }            
+        String caminhosDijkstra = "Origem: " + vertex[origem].getLabel() + "\n\n\n";
+        for (int i = 0; i < nVertex; i++) {
+            caminhos[i] += vertex[i].getLabel();
+            if (i != origem) {
+                if (dist[i] >= Double.POSITIVE_INFINITY) {
+                    caminhosDijkstra += "Distancia entre " + vertex[origem].getLabel() + " e " + vertex[i].getLabel() + " = Nao existe\n";
+                } else {
+                    caminhosDijkstra += "Distancia entre " + vertex[origem].getLabel() + " e " + vertex[i].getLabel() + " = " + dist[i] + "\nCaminho com menor custo: " + caminhos[i] + "\n";
+                }
+                if (i < nVertex - 1) {
+                    caminhosDijkstra += "\n";
+                }
+            }
         }
         JOptionPane.showMessageDialog(null, caminhosDijkstra, "Algoritmo Dijkstra", JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    protected int contarArestas(){
+
+    protected int countEdges() {
         int cont = 0;
-    
-        for(int i = 0; i<nVertices; i++){
-            for(int j = i; j<nVertices; j++){
-                if(adjacencia[i][j].getCusto()!=-1)
+
+        for (int i = 0; i < nVertex; i++) {
+            for (int j = i; j < nVertex; j++) {
+                if (adjacency[i][j].getCost() != -1) {
                     cont++;
+                }
             }
         }
         return cont;
     }
-    
-    protected void cicloEuleriano(Aresta[][] adjacenciaEuleriano){
+
+    protected void eulerianPath(Edge[][] adjacenciaEuleriano) {
         int noInformado;
-        String xString = JOptionPane.showInputDialog(painelGrafo,
+        String xString = JOptionPane.showInputDialog(graphPanel,
                 "Informe o nó de início", null);
         try {
             noInformado = Integer.parseInt(xString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        
-        int qtdArestas = contarArestas();
+
+        int qtdArestas = countEdges();
         int listaArestas[][] = new int[qtdArestas][2];
         int iVisitas = 0;
-        for(int i = 0; i<qtdArestas; i++){
-            listaArestas[i][0] = -1;     
-            listaArestas[i][1] = -1;     
-        }        
-        
-        Busca cicloEuleriano = new Busca(nVertices,adjacenciaEuleriano,qtdArestas);
+        for (int i = 0; i < qtdArestas; i++) {
+            listaArestas[i][0] = -1;
+            listaArestas[i][1] = -1;
+        }
+
+        Search cicloEuleriano = new Search(nVertex, adjacenciaEuleriano, qtdArestas);
         listaArestas = cicloEuleriano.cicloEuleriano(noInformado);
-        
+
         String cicloEulerianoString = "";
-        for(int i = 0; i<qtdArestas; i++)
-            cicloEulerianoString += listaArestas[i][0]+"->";
-        
-        cicloEulerianoString += listaArestas[qtdArestas-1][1];
-        
+        for (int i = 0; i < qtdArestas; i++) {
+            cicloEulerianoString += listaArestas[i][0] + "->";
+        }
+
+        cicloEulerianoString += listaArestas[qtdArestas - 1][1];
+
         JOptionPane.showMessageDialog(null, cicloEulerianoString, "Ciclo Euleriano", JOptionPane.INFORMATION_MESSAGE);
-        
+
     }
-    
-    protected void buscaProfundidade (int inicio) {
-        Busca B = new Busca(nVertices, adjacencia);
+
+    protected void depthFirstSearch(int inicio) {
+        Search B = new Search(nVertex, adjacency);
         int[] vetor = B.profundidade(inicio);
         String msg = "";
-        for(int i = 0; i<nVertices; i++){
-            if (vetor[i] != -1){
-                if (i > 0) msg += "->";
-                msg += vertices[vetor[i]].getRotulo();         
+        for (int i = 0; i < nVertex; i++) {
+            if (vetor[i] != -1) {
+                if (i > 0) {
+                    msg += "->";
+                }
+                msg += vertex[vetor[i]].getLabel();
             }
         }
         JOptionPane.showMessageDialog(null, msg, "Busca em Profundidade", JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    protected void buscaLargura (int inicio) { 
-        Busca b = new Busca(nVertices, adjacencia);
+
+    protected void breadthFirstSearch(int inicio) {
+        Search b = new Search(nVertex, adjacency);
         int[] vetor = b.largura(inicio);
         String msg = "";
-        for(int i = 0; i<nVertices; i++){
-            if (vetor[i] != -1){
-                if (i > 0) msg += "->";
-                msg += vertices[vetor[i]].getRotulo();         
+        for (int i = 0; i < nVertex; i++) {
+            if (vetor[i] != -1) {
+                if (i > 0) {
+                    msg += "->";
+                }
+                msg += vertex[vetor[i]].getLabel();
             }
         }
         JOptionPane.showMessageDialog(null, msg, "Busca em Largura", JOptionPane.INFORMATION_MESSAGE);
     }
-    
+
     protected void openFile() {
         String conteudo = "", line;
-        int returnVal = selectAbrirArquivo.showOpenDialog(this);
+        int returnVal = selectOpenFile.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             reset();
             Charset inputCharset = Charset.forName("ISO-8859-1");
             try {
-                File file = selectAbrirArquivo.getSelectedFile();
+                File file = selectOpenFile.getSelectedFile();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), inputCharset));
                 fileLocation = file.getAbsolutePath();
                 this.setTitle("Visualizador Grafo - " + file.getName());
@@ -438,525 +724,382 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                     }
                     if (line.isEmpty()) {
                         isAresta = true;
-                        adjacencia = new Aresta[nVertices][nVertices];
-                        for (int i = 0; i < nVertices; i++) {
-                            for (int j = 0; j < nVertices; j++) {
-                                adjacencia[i][j] = new Aresta("NULL", -1);
+                        adjacency = new Edge[nVertex][nVertex];
+                        for (int i = 0; i < nVertex; i++) {
+                            for (int j = 0; j < nVertex; j++) {
+                                adjacency[i][j] = new Edge("NULL", -1);
                             }
                         }
                         continue;
                     }
-                    analisaLinha(line, isAresta);
+                    analyzeLine(line, isAresta);
                 }
                 reader.close();
                 System.out.println("Leitura bem-sucedida.");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Erro ao carregar arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error ao carregar arquivo.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.err.println(e);
             }
-            drawRotulosArestas();
+            drawEdgesLabels();
             redraw = true;
             repaint();
         }
     }
-    
-    protected void saveFile(){
-        int returnVal = selectSalvarArquivo.showSaveDialog(this);
+
+    protected void saveFile() {
+        int returnVal = selectSaveFile.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
-                File file = selectSalvarArquivo.getSelectedFile();
+                File file = selectSaveFile.getSelectedFile();
                 FileWriter fw = new FileWriter(file + ".grafo");
                 fw.write(converteDadosParaArquivo());
                 fw.flush();
                 fileLocation = file.getAbsolutePath();
                 this.setTitle("Visualizador Grafo - " + file.getName());
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao salvar arquivo.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error ao salvar arquivo.", "Error", JOptionPane.ERROR_MESSAGE);
                 System.err.println(e);
             }
         }
     }
-    
-    protected void insertVertice(int x, int y){
-        String rotulo = JOptionPane.showInputDialog(painelGrafo,
+
+    protected void insertVertex(int x, int y) {
+        String rotulo = JOptionPane.showInputDialog(graphPanel,
                 "Rótulo", null);
-        if (rotulo == null) return;
-        nVertices++; // incrementa o número de vértices
-        Aresta[][] tmp = adjacencia;
-        adjacencia = new Aresta[nVertices][nVertices];
-        for (int i = 0; i < nVertices - 1; i++) {
-            System.arraycopy(tmp[i], 0, adjacencia[i], 0, nVertices - 1);
+        if (rotulo == null) {
+            return;
         }
-        for (int i = 0; i < nVertices; i++) {
-            adjacencia[i][nVertices - 1] = new Aresta("NULL", -1);
+        nVertex++; // incrementa o número de vértices
+        Edge[][] tmp = adjacency;
+        adjacency = new Edge[nVertex][nVertex];
+        for (int i = 0; i < nVertex - 1; i++) {
+            System.arraycopy(tmp[i], 0, adjacency[i], 0, nVertex - 1);
         }
-        for (int i = 0; i < nVertices; i++) {
-            adjacencia[nVertices - 1][i] = new Aresta("NULL", -1);
+        for (int i = 0; i < nVertex; i++) {
+            adjacency[i][nVertex - 1] = new Edge("NULL", -1);
         }
-        Vertice[] tmp2 = vertices; // copia o array vértice atual para um temporário
-        vertices = new Vertice[nVertices]; // recria o array de vértices vazio, com o novo tamanho
-        System.arraycopy(tmp2, 0, vertices, 0, tmp2.length); // copia o array temporário para o novo
-        Vertice novoVertice = new Vertice(x, y, rotulo); // cria um novo vértice
-        vertices[nVertices - 1] = novoVertice; // insere o novo vértice na listagem
-        drawRotulosArestas();
+        for (int i = 0; i < nVertex; i++) {
+            adjacency[nVertex - 1][i] = new Edge("NULL", -1);
+        }
+        Vertex[] tmp2 = vertex; // copia o array vértice atual para um temporário
+        vertex = new Vertex[nVertex]; // recria o array de vértices vazio, com o novo tamanho
+        System.arraycopy(tmp2, 0, vertex, 0, tmp2.length); // copia o array temporário para o novo
+        Vertex novoVertice = new Vertex(x, y, rotulo); // cria um novo vértice
+        vertex[nVertex - 1] = novoVertice; // insere o novo vértice na listagem
+        drawEdgesLabels();
     }
-    
-    protected void removeVertice(int id){
-        nVertices--;
-        Vertice[] tmp = vertices; // copia o array vértice atual para um temporário
-        vertices = new Vertice[nVertices];
-        for (int i=0;i<id;i++)
-            vertices[i] = tmp[i]; //copia a primeira parte do array, antes do elemento excluido
-        if (id < nVertices)
-            for (int i=id+1;i<nVertices+1;i++)
-                vertices[i-1] = tmp[i]; //copia a segunda parte do array, depois do elemento excluido
-        //Apaga arestas do nodo excluído
-        Aresta[][] tmp2 = adjacencia;
-        adjacencia = new Aresta[nVertices][nVertices];
-        for (int i=0; i<id;i++) // primeiro quadrante
-            for (int j=0; j<id; j++)
-                adjacencia[i][j] = tmp2[i][j];
-        for (int i=id+1; i<nVertices+1;i++) // segundo quadrante
-            for (int j=0; j<id; j++)
-                adjacencia[i-1][j] = tmp2[i][j];
-        for (int i=0; i<id;i++) // terceiro quadrante
-            for (int j=id+1; j<nVertices+1; j++)
-                adjacencia[i][j-1] = tmp2[i][j];
-        for (int i=id+1; i<nVertices+1;i++) // quarto quadrante
-            for (int j=id+1; j<nVertices+1; j++)
-                adjacencia[i-1][j-1] = tmp2[i][j];
-        drawRotulosArestas();
+
+    protected void removeVertex(int id) {
+        nVertex--;
+        Vertex[] tmp = vertex; // copia o array vértice atual para um temporário
+        vertex = new Vertex[nVertex];
+        for (int i = 0; i < id; i++) {
+            vertex[i] = tmp[i]; //copia a primeira parte do array, antes do elemento excluido
+        }
+        if (id < nVertex) {
+            for (int i = id + 1; i < nVertex + 1; i++) {
+                vertex[i - 1] = tmp[i]; //copia a segunda parte do array, depois do elemento excluido
+            }        //Apaga arestas do nodo excluído
+        }
+        Edge[][] tmp2 = adjacency;
+        adjacency = new Edge[nVertex][nVertex];
+        for (int i = 0; i < id; i++) // primeiro quadrante
+        {
+            for (int j = 0; j < id; j++) {
+                adjacency[i][j] = tmp2[i][j];
+            }
+        }
+        for (int i = id + 1; i < nVertex + 1; i++) // segundo quadrante
+        {
+            for (int j = 0; j < id; j++) {
+                adjacency[i - 1][j] = tmp2[i][j];
+            }
+        }
+        for (int i = 0; i < id; i++) // terceiro quadrante
+        {
+            for (int j = id + 1; j < nVertex + 1; j++) {
+                adjacency[i][j - 1] = tmp2[i][j];
+            }
+        }
+        for (int i = id + 1; i < nVertex + 1; i++) // quarto quadrante
+        {
+            for (int j = id + 1; j < nVertex + 1; j++) {
+                adjacency[i - 1][j - 1] = tmp2[i][j];
+            }
+        }
+        drawEdgesLabels();
     }
-    
-    protected void insertAresta(int origem, int destino){
-        int  custo;
-        String rotulo = JOptionPane.showInputDialog(painelGrafo,
+
+    protected void insertEdge(int origem, int destino) {
+        int custo;
+        String rotulo = JOptionPane.showInputDialog(graphPanel,
                 "Rótulo", null);
-        String custoString = JOptionPane.showInputDialog(painelGrafo,
+        String custoString = JOptionPane.showInputDialog(graphPanel,
                 "Custo", null);
         try {
             custo = Integer.parseInt(custoString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
         try {
-            Aresta a = new Aresta(rotulo, custo);
-            adjacencia[origem][destino] = a;
-            adjacencia[destino][origem] = a;
+            Edge a = new Edge(rotulo, custo);
+            adjacency[origem][destino] = a;
+            adjacency[destino][origem] = a;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Inexistent ID.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
         }
-        drawRotulosArestas();
+        drawEdgesLabels();
+        redraw = true;
+        repaint();
+    }
+
+    protected void removeEdge(int origem, int destino) {
+        try {
+            adjacency[origem][destino] = new Edge("NULL", -1);
+            adjacency[destino][origem] = new Edge("NULL", -1);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Inexistent ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+        }
+        drawEdgesLabels();
         redraw = true;
         repaint();
     }
     
-    protected void removeAresta(int origem, int destino){
-        try {
-            adjacencia[origem][destino] = new Aresta("NULL", -1);
-            adjacencia[destino][origem] = new Aresta("NULL", -1);
-        }catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
-            System.err.println(e);
-        }
-        drawRotulosArestas();
-        redraw = true;
-        repaint();
-    }
     
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * The button that exits the program.
+     * @param evt The mouse click event.
      */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        selectAbrirArquivo = new javax.swing.JFileChooser();
-        selectSalvarArquivo = new javax.swing.JFileChooser();
-        lblEuleriano = new javax.swing.JLabel();
-        lblConexos = new javax.swing.JLabel();
-        painelGrafo = new javax.swing.JPanel();
-        menuPrincipal = new javax.swing.JMenuBar();
-        itemArquivo = new javax.swing.JMenu();
-        subItemArquivoNovo = new javax.swing.JMenuItem();
-        subItemArquivoAbrir = new javax.swing.JMenuItem();
-        subItemArquivoSalvar = new javax.swing.JMenuItem();
-        subItemArquivoSair = new javax.swing.JMenuItem();
-        itemEditar = new javax.swing.JMenu();
-        subItemEditarInserirVertice = new javax.swing.JMenuItem();
-        subItemEditarInserirAresta = new javax.swing.JMenuItem();
-        subItemEditarRemoverVertice = new javax.swing.JMenuItem();
-        subItemEditarRemoverAresta = new javax.swing.JMenuItem();
-        itemBusca = new javax.swing.JMenu();
-        subItemBuscaLargura = new javax.swing.JMenuItem();
-        subItemBuscaProfundidade = new javax.swing.JMenuItem();
-        subItemBuscaFleury = new javax.swing.JMenuItem();
-        subItemBuscaDijkstra = new javax.swing.JMenuItem();
-        subItemAlgoritmosGoodman = new javax.swing.JMenuItem();
-
-        selectAbrirArquivo.setDialogTitle("Abrir");
-
-        selectSalvarArquivo.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        selectSalvarArquivo.setApproveButtonText("Salvar");
-        selectSalvarArquivo.setApproveButtonToolTipText("Salvar");
-        selectSalvarArquivo.setDialogTitle("Salvar");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Visualizador Grafo");
-        setMaximumSize(new java.awt.Dimension(800, 600));
-        setMinimumSize(new java.awt.Dimension(800, 600));
-        setName("mainFrame"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(800, 600));
-
-        lblEuleriano.setText("Não euleriano");
-        lblEuleriano.setEnabled(false);
-        lblEuleriano.setFocusable(false);
-
-        lblConexos.setText("Componentes conexos: 0");
-        lblConexos.setEnabled(false);
-        lblConexos.setFocusable(false);
-
-        painelGrafo.setBackground(new java.awt.Color(254, 254, 254));
-        painelGrafo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 0));
-        painelGrafo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        painelGrafo.setEnabled(false);
-
-        javax.swing.GroupLayout painelGrafoLayout = new javax.swing.GroupLayout(painelGrafo);
-        painelGrafo.setLayout(painelGrafoLayout);
-        painelGrafoLayout.setHorizontalGroup(
-            painelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        painelGrafoLayout.setVerticalGroup(
-            painelGrafoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
-        );
-
-        itemArquivo.setText("Arquivo");
-
-        subItemArquivoNovo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        subItemArquivoNovo.setText("Novo");
-        subItemArquivoNovo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemArquivoNovoActionPerformed(evt);
-            }
-        });
-        itemArquivo.add(subItemArquivoNovo);
-
-        subItemArquivoAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
-        subItemArquivoAbrir.setText("Abrir");
-        subItemArquivoAbrir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemArquivoAbrirActionPerformed(evt);
-            }
-        });
-        itemArquivo.add(subItemArquivoAbrir);
-
-        subItemArquivoSalvar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
-        subItemArquivoSalvar.setText("Salvar");
-        subItemArquivoSalvar.setEnabled(false);
-        subItemArquivoSalvar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemArquivoSalvarActionPerformed(evt);
-            }
-        });
-        itemArquivo.add(subItemArquivoSalvar);
-
-        subItemArquivoSair.setText("Sair");
-        subItemArquivoSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemArquivoSairActionPerformed(evt);
-            }
-        });
-        itemArquivo.add(subItemArquivoSair);
-
-        menuPrincipal.add(itemArquivo);
-
-        itemEditar.setText("Editar");
-        itemEditar.setEnabled(false);
-
-        subItemEditarInserirVertice.setText("Inserir vértice");
-        subItemEditarInserirVertice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemEditarInserirVerticeActionPerformed(evt);
-            }
-        });
-        itemEditar.add(subItemEditarInserirVertice);
-
-        subItemEditarInserirAresta.setText("Inserir aresta");
-        subItemEditarInserirAresta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemEditarInserirArestaActionPerformed(evt);
-            }
-        });
-        itemEditar.add(subItemEditarInserirAresta);
-
-        subItemEditarRemoverVertice.setText("Remover vértice");
-        subItemEditarRemoverVertice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemEditarRemoverVerticeActionPerformed(evt);
-            }
-        });
-        itemEditar.add(subItemEditarRemoverVertice);
-
-        subItemEditarRemoverAresta.setText("Remover aresta");
-        subItemEditarRemoverAresta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemEditarRemoverArestaActionPerformed(evt);
-            }
-        });
-        itemEditar.add(subItemEditarRemoverAresta);
-
-        menuPrincipal.add(itemEditar);
-
-        itemBusca.setText("Algoritmos");
-        itemBusca.setEnabled(false);
-
-        subItemBuscaLargura.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
-        subItemBuscaLargura.setText("Busca em largura");
-        subItemBuscaLargura.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemBuscaLarguraActionPerformed(evt);
-            }
-        });
-        itemBusca.add(subItemBuscaLargura);
-
-        subItemBuscaProfundidade.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
-        subItemBuscaProfundidade.setText("Busca em profundidade");
-        subItemBuscaProfundidade.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemBuscaProfundidadeActionPerformed(evt);
-            }
-        });
-        itemBusca.add(subItemBuscaProfundidade);
-
-        subItemBuscaFleury.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
-        subItemBuscaFleury.setText("Ciclo Euleriano (Fleury)");
-        subItemBuscaFleury.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemBuscaFleuryActionPerformed(evt);
-            }
-        });
-        itemBusca.add(subItemBuscaFleury);
-
-        subItemBuscaDijkstra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
-        subItemBuscaDijkstra.setText("Custo Mínimo (Dijkstra)");
-        subItemBuscaDijkstra.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemBuscaDijkstraActionPerformed(evt);
-            }
-        });
-        itemBusca.add(subItemBuscaDijkstra);
-
-        subItemAlgoritmosGoodman.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
-        subItemAlgoritmosGoodman.setText("Goodman");
-        subItemAlgoritmosGoodman.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subItemAlgoritmosGoodmanActionPerformed(evt);
-            }
-        });
-        itemBusca.add(subItemAlgoritmosGoodman);
-
-        menuPrincipal.add(itemBusca);
-
-        setJMenuBar(menuPrincipal);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(painelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblEuleriano)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblConexos)
-                        .addGap(0, 485, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(painelGrafo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEuleriano)
-                    .addComponent(lblConexos))
-                .addContainerGap())
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void subItemArquivoSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSairActionPerformed
+    private void subItemFileExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemFileExitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_subItemArquivoSairActionPerformed
-    
-    private void subItemBuscaProfundidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaProfundidadeActionPerformed
-        int noInformado;
-        String noString = JOptionPane.showInputDialog(painelGrafo,
-                "Informe o nó de início", null);
+    }//GEN-LAST:event_subItemFileExitActionPerformed
+
+    /**
+     * The button that calls DFS.
+     * @param evt The mouse click event.
+     */
+    private void subItemSearchDepthFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemSearchDepthFirstActionPerformed
+        int node;
+        String nodeString = JOptionPane.showInputDialog(graphPanel,
+                "Initial node", null);
         try {
-            noInformado = Integer.parseInt(noString);
+            node = Integer.parseInt(nodeString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        buscaProfundidade(noInformado);
-    }//GEN-LAST:event_subItemBuscaProfundidadeActionPerformed
-    
-    private void subItemArquivoAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoAbrirActionPerformed
-        openFile();
-    }//GEN-LAST:event_subItemArquivoAbrirActionPerformed
+        depthFirstSearch(node);
+    }//GEN-LAST:event_subItemSearchDepthFirstActionPerformed
 
-    private void subItemArquivoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoSalvarActionPerformed
+    /**
+     * The button that calls a open file dialog.
+     * @param evt The mouse click event.
+     */
+    private void subItemFileOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemFileOpenActionPerformed
+        openFile();
+    }//GEN-LAST:event_subItemFileOpenActionPerformed
+
+    /**
+     * The button that saves the opened file.
+     * @param evt The mouse click event.
+     */
+    private void subItemFileSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemFileSaveActionPerformed
         saveFile();
-    }//GEN-LAST:event_subItemArquivoSalvarActionPerformed
- 
-    private void subItemAlgoritmosGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgoritmosGoodmanActionPerformed
+    }//GEN-LAST:event_subItemFileSaveActionPerformed
+
+    /**
+     * The button that calls Goodman's algorithm.
+     * @param evt The mouse click event.
+     */
+    private void subItemAlgorithmsGoodmanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgorithmsGoodmanActionPerformed
         goodman(true);
-    }//GEN-LAST:event_subItemAlgoritmosGoodmanActionPerformed
-                                                       
-    private void subItemEditarInserirVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirVerticeActionPerformed
+    }//GEN-LAST:event_subItemAlgorithmsGoodmanActionPerformed
+
+    /**
+     * The button that invokes a new vertex insertion into a (X,Y) coordinate.
+     * @param evt The mouse click event.
+     */
+    private void subItemEditInsertVertexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditInsertVertexActionPerformed
         int x, y;
-        String xString = JOptionPane.showInputDialog(painelGrafo,
-                "Coordenada X", null);
+        String xString = JOptionPane.showInputDialog(graphPanel,
+                "X Coordinate", null);
         try {
             x = Integer.parseInt(xString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        String yString = JOptionPane.showInputDialog(painelGrafo,
-                "Coordenada Y", null);
+        String yString = JOptionPane.showInputDialog(
+                graphPanel,
+                "Y Coordinate",
+                null
+        );
         try {
             y = Integer.parseInt(yString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        insertVertice(x, y);
-    }//GEN-LAST:event_subItemEditarInserirVerticeActionPerformed
-
-    private void subItemArquivoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemArquivoNovoActionPerformed
+        insertVertex(x, y);
+    }//GEN-LAST:event_subItemEditInsertVertexActionPerformed
+    
+    /**
+     * The button that initializes a new file.
+     * @param evt The mouse click event.
+     */
+    private void subItemFileNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemFileNewActionPerformed
         reset();
-    }//GEN-LAST:event_subItemArquivoNovoActionPerformed
+    }//GEN-LAST:event_subItemFileNewActionPerformed
+    
+    /**
+     * The button that calls BFS.
+     * @param evt The mouse click event.
+     */
+    private void subItemSearchBreadthFirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemSearchBreadthFirstActionPerformed
+        int node;
+        String nodeString = JOptionPane.showInputDialog(graphPanel,
+                "Initial node", null);
+        try {
+            node = Integer.parseInt(nodeString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        breadthFirstSearch(node);
+    }//GEN-LAST:event_subItemSearchBreadthFirstActionPerformed
 
-    private void subItemBuscaLarguraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaLarguraActionPerformed
-        int no;
-        String noString = JOptionPane.showInputDialog(painelGrafo,
-                "Nó Inicial", null);
+    /**
+     * The button that insert an edge between two vertices.
+     * @param evt The mouse click event.
+     */
+    private void subItemEditInsertEdgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditInsertEdgeActionPerformed
+        int from, to;
+        String fromString = JOptionPane.showInputDialog(graphPanel,
+                "Origin ID", null);
         try {
-            no = Integer.parseInt(noString);
+            from = Integer.parseInt(fromString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        buscaLargura(no);
-    }//GEN-LAST:event_subItemBuscaLarguraActionPerformed
+        String toString = JOptionPane.showInputDialog(
+                graphPanel,
+                "Destinty ID",
+                null
+        );
+        try {
+            to = Integer.parseInt(toString);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println(e);
+            return;
+        }
+        insertEdge(from, to);
+    }//GEN-LAST:event_subItemEditInsertEdgeActionPerformed
 
-    private void subItemEditarInserirArestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarInserirArestaActionPerformed
-        int origem, destino;
-        String origemString = JOptionPane.showInputDialog(painelGrafo,
-                "ID de Origem", null);
+    /**
+     * The button that remove a given edge.
+     * @param evt The mouse click event.
+     */
+    private void subItemEditRemoveEdgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditRemoveEdgeActionPerformed
+        int from, to;
+        String fromString = JOptionPane.showInputDialog(
+                graphPanel,
+                "Origin ID",
+                null
+        );
         try {
-            origem = Integer.parseInt(origemString);
+            from = Integer.parseInt(fromString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        String destinoString = JOptionPane.showInputDialog(painelGrafo,
-                "ID de Destino", null);
+        String toString = JOptionPane.showInputDialog(
+                graphPanel,
+                "Destiny ID",
+                null
+        );
         try {
-            destino = Integer.parseInt(destinoString);
+            to = Integer.parseInt(toString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        insertAresta(origem, destino);
-    }//GEN-LAST:event_subItemEditarInserirArestaActionPerformed
+        removeEdge(from, to);
+    }//GEN-LAST:event_subItemEditRemoveEdgeActionPerformed
 
-    private void subItemEditarRemoverArestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarRemoverArestaActionPerformed
-        int origem, destino;
-        String origemString = JOptionPane.showInputDialog(painelGrafo,
-                "ID de Origem", null);
-        try {
-            origem = Integer.parseInt(origemString);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-            System.err.println(e);
-            return;
-        }
-        String destinoString = JOptionPane.showInputDialog(painelGrafo,
-                "ID de Destino", null);
-        try {
-            destino = Integer.parseInt(destinoString);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
-            System.err.println(e);
-            return;
-        }
-        removeAresta(origem, destino);
-    }//GEN-LAST:event_subItemEditarRemoverArestaActionPerformed
-
-    private void subItemEditarRemoverVerticeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditarRemoverVerticeActionPerformed
+    /**
+     * The button that remove a given vertex.
+     * @param evt The mouse click event.
+     */
+    private void subItemEditRemoveVertexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemEditRemoveVertexActionPerformed
         int id;
-        String idString = JOptionPane.showInputDialog(painelGrafo,
-                "ID", null);
+        String idString = JOptionPane.showInputDialog(
+                graphPanel,
+                "ID",
+                null
+        );
         try {
             id = Integer.parseInt(idString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        if (id < 0 || id >= nVertices){
-            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+        if (id < 0 || id >= nVertex) {
+            JOptionPane.showMessageDialog(null, "Inexistent ID.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        removeVertice(id);
-    }//GEN-LAST:event_subItemEditarRemoverVerticeActionPerformed
-       
-    private void subItemBuscaFleuryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaFleuryActionPerformed
-        if(isEuleriano())
-            cicloEuleriano(adjacencia);
-        else
-            JOptionPane.showMessageDialog(null, "O Grafo não tem ciclo euleriano, pois ele não é euleriano.", "Erro", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_subItemBuscaFleuryActionPerformed
-        
-    private void subItemBuscaDijkstraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemBuscaDijkstraActionPerformed
-        int noInformado;
-        
-        String xString = JOptionPane.showInputDialog(painelGrafo,
-                "Informe a ID do nó origem", null);
+        removeVertex(id);
+    }//GEN-LAST:event_subItemEditRemoveVertexActionPerformed
+    
+    /**
+     * The button that invokes Fleury's algorithm.
+     * @param evt The mouse click event.
+     */
+    private void subItemAlgorithmsFleuryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgorithmsFleuryActionPerformed
+        if (isEulerian()) {
+            eulerianPath(adjacency);
+        } else {
+            JOptionPane.showMessageDialog(null, "Cannot perform eulerian path because the graph isn't eulerian.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_subItemAlgorithmsFleuryActionPerformed
+
+    /**
+     * The button that invokes Djikstra's algorithm.
+     * @param evt The mouse click event.
+     */
+    private void subItemAlgorithmsDijkstraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subItemAlgorithmsDijkstraActionPerformed
+        int node;
+        String idString = JOptionPane.showInputDialog(
+                graphPanel,
+                "Inform the origin node ID.",
+                null
+        );
         try {
-            noInformado = Integer.parseInt(xString);
+            node = Integer.parseInt(idString);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Valor inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Invalid value.", "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println(e);
             return;
         }
-        if (noInformado < 0 || noInformado >= nVertices){
-            JOptionPane.showMessageDialog(null, "ID inexistente.", "Erro", JOptionPane.ERROR_MESSAGE);
+        if (node < 0 || node >= nVertex) {
+            JOptionPane.showMessageDialog(null, "Inexistent ID.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        dijkstra(noInformado);
-        
-    }//GEN-LAST:event_subItemBuscaDijkstraActionPerformed
+        dijkstra(node);
+    }//GEN-LAST:event_subItemAlgorithmsDijkstraActionPerformed
 
     /**
      * @param args the command line arguments
@@ -991,62 +1134,66 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
                 new VisualizadorGrafo().setVisible(true);
             }
         });
-        System.out.println("***************************************\n" +
-            "**BEM-VINDO AO VISUALIZADOR DE GRAFOS**\n" +
-            "***************************************\n" +
-            "*                                     *\n" +
-            "* Para criar um novo grafo, acesse o  *\n" +
-            "* menu Arquivo, ou abra um grafo      *\n" +
-            "* exemplo na pasta ../exemplos        *\n" +
-            "*                                     *\n" +
-            "*                                     *\n" +
-            "* Na tela, será exibido o RÓTULO de   *\n" +
-            "* cada vértice. Para saber o respec-  *\n" +
-            "* tivo ID, passe o mouse por sobre o  *\n" +
-            "* vértice. Note que o ID pode mudar   *\n" +
-            "* caso hajam exclusões de vértices,   *\n" +
-            "* já que o mesmo é o índice do vérti- *\n" +
-            "* ce na matriz de adjacência.         *\n" +
-            "*                                     *\n" +
-            "*            Faça bom uso!            *\n" +
-            "***************************************\n" +
-            "********* ELIXANDRE M. BALDI **********\n" +
-            "******* LUIZ GUILHERME F. ROSA ********\n" +
-            "***************************************\n" +
-            "********* UNIOESTE CASCAVEL ***********\n" +
-            "******* PROF. JOSUÉ P. CASTRO *********\n" +
-            "***************************************");
     }
-    
-    private final double maximo = Double.POSITIVE_INFINITY; // famigerado "M-grande"
+
+    /**
+     * Some really big value. Also known as Big M.
+     */
+    private final double bigM = Double.POSITIVE_INFINITY;
+
+    /**
+     * Location of the opened file.
+     */
     private String fileLocation;
-    private Vertice[] vertices;
-    private Aresta[][] adjacencia;
-    private int nVertices;
+
+    /**
+     * Vertices array.
+     */
+    private Vertex[] vertex;
+
+    /**
+     * Edges array.
+     */
+    private Edge[][] adjacency;
+
+    /**
+     * Vertices count.
+     */
+    private int nVertex;
+
+    /**
+     * Flag indicating if the graph should be redrawed.
+     */
     private boolean redraw = false;
-    private int qtdComponentesConexo = 0;
+
+    /**
+     * Connected components count.
+     */
+    private int connectedComponents = 0;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu itemArquivo;
-    private javax.swing.JMenu itemBusca;
-    private javax.swing.JMenu itemEditar;
-    private javax.swing.JLabel lblConexos;
-    private javax.swing.JLabel lblEuleriano;
-    private javax.swing.JMenuBar menuPrincipal;
-    private javax.swing.JPanel painelGrafo;
-    private javax.swing.JFileChooser selectAbrirArquivo;
-    private javax.swing.JFileChooser selectSalvarArquivo;
-    private javax.swing.JMenuItem subItemAlgoritmosGoodman;
-    private javax.swing.JMenuItem subItemArquivoAbrir;
-    private javax.swing.JMenuItem subItemArquivoNovo;
-    private javax.swing.JMenuItem subItemArquivoSair;
-    private javax.swing.JMenuItem subItemArquivoSalvar;
-    private javax.swing.JMenuItem subItemBuscaDijkstra;
-    private javax.swing.JMenuItem subItemBuscaFleury;
-    private javax.swing.JMenuItem subItemBuscaLargura;
-    private javax.swing.JMenuItem subItemBuscaProfundidade;
-    private javax.swing.JMenuItem subItemEditarInserirAresta;
-    private javax.swing.JMenuItem subItemEditarInserirVertice;
-    private javax.swing.JMenuItem subItemEditarRemoverAresta;
-    private javax.swing.JMenuItem subItemEditarRemoverVertice;
+    private javax.swing.JPanel graphPanel;
+    private javax.swing.JMenu itemAlgorithms;
+    private javax.swing.JMenu itemEdit;
+    private javax.swing.JMenu itemFile;
+    private javax.swing.JMenu itemSearch;
+    private javax.swing.JLabel lblConnectedComponents;
+    private javax.swing.JLabel lblEulerian;
+    private javax.swing.JMenuBar mainMenu;
+    private javax.swing.JFileChooser selectOpenFile;
+    private javax.swing.JFileChooser selectSaveFile;
+    private javax.swing.JMenuItem subItemAlgorithmsDijkstra;
+    private javax.swing.JMenuItem subItemAlgorithmsFleury;
+    private javax.swing.JMenuItem subItemAlgorithmsGoodman;
+    private javax.swing.JMenuItem subItemEditInsertEdge;
+    private javax.swing.JMenuItem subItemEditInsertVertex;
+    private javax.swing.JMenuItem subItemEditRemoveEdge;
+    private javax.swing.JMenuItem subItemEditRemoveVertex;
+    private javax.swing.JMenuItem subItemFileExit;
+    private javax.swing.JMenuItem subItemFileNew;
+    private javax.swing.JMenuItem subItemFileOpen;
+    private javax.swing.JMenuItem subItemFileSave;
+    private javax.swing.JMenuItem subItemSearchBreadthFirst;
+    private javax.swing.JMenuItem subItemSearchDepthFirst;
     // End of variables declaration//GEN-END:variables
 }
