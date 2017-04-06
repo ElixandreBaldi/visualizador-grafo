@@ -4,7 +4,6 @@ package visualizadorgrafo;
  * @author Elixandre M. Baldi <https://github.com/ElixandreBaldi>
  * @author Luiz Guilherme F. Rosa <https://github.com/luizguilhermefr>
  */
-
 public class Edge {
     
     /**

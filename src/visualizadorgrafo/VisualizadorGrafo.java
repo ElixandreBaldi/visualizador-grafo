@@ -1,10 +1,5 @@
 package visualizadorgrafo;
 
-/**
- * @author Elixandre M. Baldi <https://github.com/ElixandreBaldi>
- * @author Luiz Guilherme F. Rosa <https://github.com/luizguilhermefr>
- */
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -21,22 +16,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
-import static java.lang.Character.getNumericValue;
 
+/**
+ * @author Elixandre M. Baldi <https://github.com/ElixandreBaldi>
+ * @author Luiz Guilherme F. Rosa <https://github.com/luizguilhermefr>
+ */
 public class VisualizadorGrafo extends javax.swing.JFrame {
 
     /**
@@ -77,6 +61,7 @@ public class VisualizadorGrafo extends javax.swing.JFrame {
             }
         });
     }
+    
     /**
      * Paint stuff on the screen.
      * @param g The graphic where to paint.

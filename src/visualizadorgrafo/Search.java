@@ -6,7 +6,6 @@ import java.util.LinkedList;
  * @author Elixandre M. Baldi <https://github.com/ElixandreBaldi>
  * @author Luiz Guilherme F. Rosa <https://github.com/luizguilhermefr>
  */
-
 public class Search {
     int[] vetorBusca;
     int[][] vetorCicloEuleriano;
