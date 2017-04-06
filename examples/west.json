@@ -1,0 +1,85 @@
+{
+	"vertices": [
+		{
+			"id": 1,
+			"label": "Cascavel",
+			"x": 380,
+			"y": 246
+		},
+		{
+			"id": 2,
+			"label": "Toledo",
+			"x": 480,
+			"y": 123
+		},
+		{
+			"id": 3,
+			"label": "Corbelia",
+			"x": 515,
+			"y": 207
+		},
+		{
+			"id": 4,
+			"label": "Foz do Iguaçu",
+			"x": 30,
+			"y": 300
+		},
+		{
+			"id": 5,
+			"label": "Capitão Leonidas Marques",
+			"x": 296,
+			"y": 429
+		},
+		{
+			"id": 6,
+			"label": "Santa Tereza do Oeste",
+			"x": 295,
+			"y": 300
+		},
+		{
+			"id": 7,
+			"label": "Guaíra",
+			"x": 297,
+			"y": 36
+		}
+	],
+	"edges": [
+		{
+			"from": 1,
+			"to": 2,
+			"cost": 40,
+			"label": "BR-467-1"
+		},
+		{
+			"from": 1,
+			"to": 3,
+			"cost": 25,
+			"label": "BR-369"
+		},
+		{
+			"from": 1,
+			"to": 6,
+			"cost": 15,
+			"label": "BR-277-1"
+		},
+		{
+			"from": 2,
+			"to": 7,
+			"cost": 90,
+			"label": "BR-467-2"
+		},
+		{
+			"from": 4,
+			"to": 6,
+			"cost": 135,
+			"label": "BR-277-2"
+		},
+		{
+			"from": 5,
+			"to": 6,
+			"cost": 70,
+			"label": "BR-163"
+		}
+	]
+	
+}
